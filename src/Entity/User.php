@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -33,8 +35,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options:['default'=>false])]
     private ?bool $is_activated = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true,options:['default'=>false])]
     private ?string $activation_token = null;
+
+    public function __construct()
+    {
+        $this->activation_token = 'coucou';
+        $this->is_activated = false;
+    }
+
 
     public function getId(): ?int
     {
