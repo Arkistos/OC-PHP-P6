@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options:['default'=>false])]
     private ?bool $is_activated = null;
 
+    #[ORM\Column(type:'string', length:100)]
+    private ?string $resetToken;
+
     #[ORM\Column(length: 255, nullable: true,options:['default'=>false])]
     private ?string $activation_token = null;
 
@@ -138,6 +141,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getResetToken():?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken):self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+    
 
     public function getActivationToken(): ?string
     {
