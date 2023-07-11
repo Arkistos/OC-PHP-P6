@@ -24,15 +24,22 @@ class Trick
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
-    private ?Group $group = null;
+
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
     private Collection $videos;
 
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true)]
+    private Collection $pictures;
+
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick')]
+    private Collection $groups;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,17 +83,7 @@ class Trick
         return $this;
     }
 
-    public function getGroup(): ?Group
-    {
-        return $this->group;
-    }
 
-    public function setGroup(?Group $group): static
-    {
-        $this->group = $group;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Video>
@@ -113,6 +110,63 @@ class Trick
             if ($video->getTrick() === $this) {
                 $video->setTrick(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): static
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): static
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroups(Group $groups): static
+    {
+        if (!$this->groups->contains($groups)) {
+            $this->groups->add($groups);
+            $groups->addTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroups(Group $groups): static
+    {
+        if ($this->groups->removeElement($groups)) {
+            $groups->removeTrick($this);
         }
 
         return $this;

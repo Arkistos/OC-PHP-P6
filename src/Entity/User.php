@@ -38,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:'string', nullable: true, length:100)]
     private ?string $resetToken;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profile_pic = null;
+
     public function __construct()
     {
         $this->is_activated = false;
@@ -146,6 +149,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetToken(string $resetToken):self
     {
         $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function getProfilePic(): ?string
+    {
+        return $this->profile_pic;
+    }
+
+    public function setProfilePic(?string $profile_pic): static
+    {
+        $this->profile_pic = $profile_pic;
 
         return $this;
     }
