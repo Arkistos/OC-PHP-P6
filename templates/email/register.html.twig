@@ -1,3 +1,4 @@
 <h1>{{ user.username }}! activez votre compte</h1>
 
 <a href="{{ absolute_url(path('check_user',{token:token})) }}">Lien d'activation</a>
+{{ token }}

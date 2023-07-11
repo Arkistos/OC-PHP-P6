@@ -35,15 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options:['default'=>false])]
     private ?bool $is_activated = null;
 
-    #[ORM\Column(type:'string', length:100)]
+    #[ORM\Column(type:'string', nullable: true, length:100)]
     private ?string $resetToken;
-
-    #[ORM\Column(length: 255, nullable: true,options:['default'=>false])]
-    private ?string $activation_token = null;
 
     public function __construct()
     {
-        $this->activation_token = 'coucou';
         $this->is_activated = false;
     }
 
@@ -154,16 +150,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     
-
-    public function getActivationToken(): ?string
-    {
-        return $this->activation_token;
-    }
-
-    public function setActivationToken(?string $activation_token): static
-    {
-        $this->activation_token = $activation_token;
-
-        return $this;
-    }
 }
