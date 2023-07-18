@@ -12,37 +12,37 @@ class VideoFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=k6aOWf0LDcQ',
+            'k6aOWf0LDcQ',
             'mute',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=6yA3XqjTh_w',
+            '6yA3XqjTh_w',
             'indy',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=grXpguVaqls',
+            'grXpguVaqls',
             '3600',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=Sj7CJH9YvAo',
+            'Sj7CJH9YvAo',
             '1800-backflip',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=oAK9mK7wWvw',
+            'oAK9mK7wWvw',
             'nose-slide',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=HRNXjMBakwM',
+            'HRNXjMBakwM',
             'tail-slide',
             $manager
         );
         $this->makeVideo(
-            'https://www.youtube.com/watch?v=gMfmjr-kuOg',
+            'gMfmjr-kuOg',
             'front-flip',
             $manager
         );

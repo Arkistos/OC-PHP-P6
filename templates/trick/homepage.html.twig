@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TrickController!{% endblock %}
+
+{% block body %}
+<h1> SnowTricks</h1>
+
+{%  for trick in tricks %}
+    <div>
+    <p><a href="trick/{{trick.slug}}">{{trick.name}}</a> <a href="trick/edit/{{trick.slug}}">Modifier</a><a href="trick/remove/{{trick.slug}}">Supprimer</a></p> 
+    
+</div>
+{% endfor %}
+{% endblock %}

@@ -33,13 +33,13 @@ class Trick
     private Collection $pictures;
 
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick')]
-    private Collection $groups;
+    private Collection $group;
 
     public function __construct()
     {
         $this->videos = new ArrayCollection();
         $this->pictures = new ArrayCollection();
-        $this->groups = new ArrayCollection();
+        $this->group = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,27 +148,29 @@ class Trick
     /**
      * @return Collection<int, Group>
      */
-    public function getGroups(): Collection
+    public function getGroup(): Collection
     {
-        return $this->groups;
+        return $this->group;
     }
 
-    public function addGroups(Group $groups): static
+    public function addGroup(Group $group): static
     {
-        if (!$this->groups->contains($groups)) {
-            $this->groups->add($groups);
-            $groups->addTrick($this);
+        if (!$this->group->contains($group)) {
+            $this->group->add($group);
+            $group->addTrick($this);
         }
 
         return $this;
     }
 
-    public function removeGroups(Group $groups): static
+    public function removeGroup(Group $group): static
     {
-        if ($this->groups->removeElement($groups)) {
-            $groups->removeTrick($this);
+        if ($this->group->removeElement($group)) {
+            $group->removeTrick($this);
         }
 
         return $this;
     }
+
+    
 }

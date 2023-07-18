@@ -1,0 +1,26 @@
+
+
+{{ form_start(trickForm)}}
+    {{ form_row(trickForm.name)}}
+    {{ form_row(trickForm.description)}}
+    {{ form_row(trickForm.group)}}
+    {% if trick is defined %}
+    {% for picture in trick.pictures %}
+        <li>
+            <img src="{{asset('assets/uploads/300-300-'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+    {{ form_row(trickForm.pictures)}}
+    {{ form_row(trickForm.videos)}}
+    {% if trick is defined %}
+    {% for video in trick.videos %}
+        <li>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <a href="/video/remove/{{video.getId}}">Supprimer</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+    <button type="submit">Valider</button>
+{{ form_end(trickForm)}}

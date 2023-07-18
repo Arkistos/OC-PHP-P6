@@ -87,7 +87,7 @@ class RegistrationController extends AbstractController
             if($user && !$user->isIsActivated()){
                 $user->setIsActivated(true);
                 $em->flush($user);
-                return $this->redirectToRoute('app_trick');
+                return $this->redirectToRoute('app_homepage');
             }
             return $this->redirectToRoute('app_login');
         }
@@ -104,7 +104,7 @@ class RegistrationController extends AbstractController
         }
 
         if($user->isIsActivated()){
-            return $this->redirectToRoute('app_trick');
+            return $this->redirectToRoute('app_homepage');
         }
 
         $header = [
@@ -126,6 +126,6 @@ class RegistrationController extends AbstractController
             'register',
             compact('user', 'token')
         );
-        return $this->redirectToRoute('app_trick');
+        return $this->redirectToRoute('app_homepage');
     }
 }

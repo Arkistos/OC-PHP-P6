@@ -72,7 +72,7 @@ class TrickFixtures extends Fixture
 
         foreach($groupReferences as $groupReference){
             $group = $this->getReference($groupReference);
-            $trick->addGroups($group);
+            $trick->addGroup($group);
         }
         $manager->persist($trick);
 

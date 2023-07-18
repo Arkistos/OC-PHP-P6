@@ -19,7 +19,7 @@ class Group
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Trick::class, inversedBy: 'groupss')]
+    #[ORM\ManyToMany(targetEntity: Trick::class, inversedBy: 'group')]
     private Collection $trick;
 
     public function __construct()

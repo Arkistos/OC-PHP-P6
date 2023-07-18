@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TrickController!{% endblock %}
+
+{% block body %}
+<h1> {{trick.name}}</h1>
+
+<p>{{trick.description}}</p>
+<ul>
+{% for group in trick.group %}
+    <li>{{group.name}}</li>
+{% endfor %}
+</ul>
+
+<ul>
+    {% for video in trick.videos %}
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    {% endfor %}
+    </ul>
+
+
+{% endblock %}
