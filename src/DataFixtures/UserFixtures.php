@@ -37,6 +37,7 @@ class UserFixtures extends Fixture
                 $this->userPasswordHasherInterface->hashPassword($user,'testing')
             );
             $manager->persist($user);
+            $this->addReference($fakeUser, $user);
         }
         $manager->flush();
     }

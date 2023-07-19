@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Group;
 use App\Entity\Trick;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class TrickFixtures extends Fixture
+class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(private SluggerInterface $sluggerInterface)
     {}
@@ -78,4 +79,11 @@ class TrickFixtures extends Fixture
 
         $this->addReference($trick->getSlug(), $trick);
     } 
+
+    public function getDependencies()
+    {
+        return[
+            GroupFixtures::class
+        ];
+    }
 }

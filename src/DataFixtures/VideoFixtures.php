@@ -5,43 +5,44 @@ namespace App\DataFixtures;
 use App\Entity\Trick;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class VideoFixtures extends Fixture
+class VideoFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $this->makeVideo(
+        $this->createVideo(
             'k6aOWf0LDcQ',
             'mute',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             '6yA3XqjTh_w',
             'indy',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             'grXpguVaqls',
             '3600',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             'Sj7CJH9YvAo',
             '1800-backflip',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             'oAK9mK7wWvw',
             'nose-slide',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             'HRNXjMBakwM',
             'tail-slide',
             $manager
         );
-        $this->makeVideo(
+        $this->createVideo(
             'gMfmjr-kuOg',
             'front-flip',
             $manager
@@ -50,11 +51,18 @@ class VideoFixtures extends Fixture
         $manager->flush();
     }
 
-    private function makeVideo(string $link, string $trickSlug, ObjectManager $objectManager):void
+    private function createVideo(string $link, string $trickSlug, ObjectManager $objectManager):void
     {
         $video = new Video();
         $video->setLink($link);
         $video->setTrick($this->getReference($trickSlug));
         $objectManager->persist($video);
+    }
+
+    public function getDependencies()
+    {
+        return[
+            TrickFixtures::class
+        ];
     }
 }
