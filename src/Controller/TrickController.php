@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\TrickFormType;
 use App\Form\VideoFormType;
+use App\Repository\CommentRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
@@ -173,10 +174,14 @@ class TrickController extends AbstractController
     }
 
     #[Route('/trick/{slug}', name:'app_trick')]
-    public function trick(Trick $trick):Response
+    public function trick(Trick $trick, CommentRepository $commentRepository, Request $request):Response
     {
+        $page = $request->query->getInt('page',1);
+        $comments = $commentRepository->findCommentsPaginated($page,$trick->getSlug());
+       
         return $this->render('trick/trick.html.twig',[
-            'trick' => $trick
+            'trick' => $trick,
+            'comments' => $comments
         ]);
     }
 

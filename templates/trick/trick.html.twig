@@ -16,7 +16,30 @@
     {% for video in trick.videos %}
     <iframe width="560" height="315" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     {% endfor %}
-    </ul>
+</ul>
+
+<ul>
+    <h2>Commentaires</h2>
+    {% for comment in comments.data %}
+        <li><strong>{{comment.user.username}} le {{comment.createdAt|date('d-m-Y')}}</strong> : {{comment.content}}</li>
+    {% endfor %}
+    {% if comments.pages > 1 %}
+        <ul>
+            {% if comments.page > 1  %}
+            <li><a href="{{ path('app_trick',{slug:trick.slug, page:comments.page - 1})}}">&lt;</a></li>
+            {% endif %}
+            {% for page in 1..comments.pages %}
+                <li>
+                    <a href="{{path('app_trick', {slug:trick.slug, page:page})}}">{{page}}</a>
+                </li>
+            {% endfor %} 
+
+            {% if comments.page < comments.pages %}
+                <li><a href="{{ path('app_trick',{slug:trick.slug, page:comments.page + 1})}}">&gt;</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</ul>
 
 
 {% endblock %}

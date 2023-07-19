@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use LimitIterator;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -20,6 +22,38 @@ class CommentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Comment::class);
     }
+
+    public function findCommentsPaginated(int $page, string $slug, int $limit = 10):array
+    {
+        $limit = abs($limit);
+
+        $result = [];
+
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('t', 'c')
+            ->from('App\Entity\Comment', 'c')
+            ->join('c.trick', 't')
+            ->where("t.slug = '$slug'")
+            ->setMaxResults($limit)
+            ->setFirstResult(($page*$limit)-$limit);
+        
+        $paginator = new Paginator($query);
+        $data = $paginator->getQuery()->getResult();
+
+        if(empty($data)){
+            return $result;
+        }
+
+        $pages = ceil($paginator->count()/$limit);
+
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['page'] = $page;
+        $result['limit'] = $limit;
+
+        return $result;
+    }
+
 
     public function save(Comment $entity, bool $flush = false): void
     {

@@ -49,18 +49,20 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         
     }
 
-    private function createComment(string $trickSlug, ObjectManager $manager):Comment
+    private function createComment(string $trickSlug, ObjectManager $manager):void
     {
-        $comment = new Comment();
+        
 
         $faker = Faker\Factory::create('fr_FR');
 
-        $comment->setContent($faker->paragraph());
-        $comment->setCreatedAt(new DateTimeImmutable());
-        $comment->setTrick($this->getReference($trickSlug));
-        $comment->setUser($this->getReference($faker->numberBetween(1,5)));
-        $manager->persist($comment);
-        return $comment;
+        for($fakeComment = 1; $fakeComment<=15; $fakeComment++){
+            $comment = new Comment();
+            $comment->setContent($faker->sentence());
+            $comment->setCreatedAt(new DateTimeImmutable());
+            $comment->setTrick($this->getReference($trickSlug));
+            $comment->setUser($this->getReference($faker->numberBetween(1,5)));
+            $manager->persist($comment);
+        }
     }
 
     public function getDependencies()
