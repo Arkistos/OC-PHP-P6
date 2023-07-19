@@ -20,6 +20,10 @@
 
 <ul>
     <h2>Commentaires</h2>
+    {{ form_start(commentForm) }}
+        {{ form_row(commentForm) }}
+        <button type="submit">Valider</button>
+    {{ form_end(commentForm) }}
     {% for comment in comments.data %}
         <li><strong>{{comment.user.username}} le {{comment.createdAt|date('d-m-Y')}}</strong> : {{comment.content}}</li>
     {% endfor %}

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\CommentFormType;
 use App\Form\TrickFormType;
 use App\Form\VideoFormType;
 use App\Repository\CommentRepository;
@@ -13,6 +15,7 @@ use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
 use App\Service\PictureService;
 use App\Service\VideoService;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -174,14 +177,28 @@ class TrickController extends AbstractController
     }
 
     #[Route('/trick/{slug}', name:'app_trick')]
-    public function trick(Trick $trick, CommentRepository $commentRepository, Request $request):Response
+    public function trick(Trick $trick, CommentRepository $commentRepository, Request $request, EntityManagerInterface $entityManagerInterface):Response
     {
         $page = $request->query->getInt('page',1);
         $comments = $commentRepository->findCommentsPaginated($page,$trick->getSlug());
+
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentFormType::class, $comment);
+        $commentForm->handleRequest($request);
+        
+
+        if($commentForm->isSubmitted() && $commentForm->isValid()){
+            $comment->setCreatedAt(new DateTimeImmutable());
+            $comment->setUser($this->getUser());
+            $comment->setTrick($trick);
+            $entityManagerInterface->persist($comment);
+            $entityManagerInterface->flush();
+        }
        
         return $this->render('trick/trick.html.twig',[
             'trick' => $trick,
-            'comments' => $comments
+            'comments' => $comments,
+            'commentForm' => $commentForm->createView()
         ]);
     }
 
