@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\SnowTricksAuthenticator;
 use App\Service\JWTService;
+use App\Service\PictureService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,13 +20,16 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, 
-        UserAuthenticatorInterface $userAuthenticator, SnowTricksAuthenticator $authenticator, 
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        SnowTricksAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
         SendMailService $mail,
-        JWTService $jwt
-        ): Response
-    {
+        JWTService $jwt,
+        PictureService $pictureService
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -38,10 +42,13 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
+
+            //Enregistrement de la photo de profil
+            $pictureService->add($form->get('profile_pic')->getData(), $user->getUsername(), '/profile_pics', 300, 300);
+
 
             $header = [
                 'typ' => 'JWT',
@@ -77,14 +84,14 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/checkToken/{token}', name: 'check_user')]
-    public function checkUser(string $token, JWTService $jwt, UserRepository $userRepository, EntityManagerInterface $em):Response
+    public function checkUser(string $token, JWTService $jwt, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
-        if($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))){
+        if($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
             $payload = $jwt->getPayload($token);
 
             $user = $userRepository->find($payload['user_id']);
 
-            if($user && !$user->isIsActivated()){
+            if($user && !$user->isIsActivated()) {
                 $user->setIsActivated(true);
                 $em->flush($user);
                 return $this->redirectToRoute('app_homepage');
@@ -96,14 +103,14 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/resendcheck', name:'resend_check')]
-    public function resendCheck(JWTService $jwt, SendMailService $mailer, UserRepository $userRepository):Response
+    public function resendCheck(JWTService $jwt, SendMailService $mailer, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
-        if(!$user){
+        if(!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        if($user->isIsActivated()){
+        if($user->isIsActivated()) {
             return $this->redirectToRoute('app_homepage');
         }
 

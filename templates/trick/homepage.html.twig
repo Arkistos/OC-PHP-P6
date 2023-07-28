@@ -3,12 +3,48 @@
 {% block title %}Hello TrickController!{% endblock %}
 
 {% block body %}
-<h1> SnowTricks</h1>
+<div class="hero">
+    <div class="hero-content">
+    <h1>Snow <strong>Tricks</strong></h1>
+    <h2>Préparez-vous à faire le grand saut !</h2>
+</div>
+</div>
+{% if app.user %}
+
+{% endif %}
+<div id="list-tricks">
+
+    <div class="card">
+        <div>
+            <img class="card-picture" src="{{asset('assets/images/icon-add.png')}}" alt="">
+        </div>
+        <h3 class="card-name"><a href="{{path('app_trick_add')}}">Ajouter une figure</a></h3>
+    </div>
 
 {%  for trick in tricks %}
-    <div>
-    <p><a href="trick/{{trick.slug}}">{{trick.name}}</a> <a href="trick/edit/{{trick.slug}}">Modifier</a><a href="trick/remove/{{trick.slug}}">Supprimer</a></p> 
-    
-</div>
+    <div class="card">
+        <div class="list-pills">
+        {% for group in trick.group %}
+            <li class="pills">{{group.name}}</li>
+        {% endfor %}
+        </div>
+        <div>
+            
+            {% set picture = trick.pictures|first %}
+            {% if picture %}
+                <img class="card-picture" src="{{asset('assets/uploads/tricks_pictures/'~ trick.id ~'-'~ picture.id ~'.webp')}}" alt="">
+            {% else %}
+                <img class="card-picture" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+            {% endif %}
+        </div>
+        <h3 class="card-name"><a href="trick/{{trick.slug}}">{{trick.name}}</a></h3>
+        {% if app.user %}
+        <div class="card-management">   
+            <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
+            <a href="trick/remove/{{trick.slug}}"><img src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
+        </div>
+        {% endif %}
+    </div>
 {% endfor %}
+</div>
 {% endblock %}

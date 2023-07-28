@@ -1,5 +1,5 @@
 
-
+<div class="informations-form">
 {{ form_start(trickForm)}}
     {{ form_row(trickForm.name)}}
     {{ form_row(trickForm.description)}}
@@ -7,13 +7,20 @@
     {% if trick is defined %}
     {% for picture in trick.pictures %}
         <li>
-            <img src="{{asset('assets/uploads/300-300-'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <img src="{{asset('assets/uploads/tricks_pictures/300-300-' ~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
             <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
         </li>
     {% endfor %}
     {% endif %}
     {{ form_row(trickForm.pictures)}}
-    {{ form_row(trickForm.videos)}}
+
+        
+
+        <div id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
+            {{ form_row(trickForm.videos)}}
+            <span></span>
+        </div>
+
     {% if trick is defined %}
     {% for video in trick.videos %}
         <li>
@@ -24,3 +31,61 @@
     {% endif %}
     <button type="submit">Valider</button>
 {{ form_end(trickForm)}}
+
+</div>
+
+{% block javascript %}
+<script>
+
+    
+    //console.log(cat)
+
+
+    let collection, button, span;
+    window.onload = () => {
+        collection = document.querySelector('#videos');
+        span = collection.querySelector("span");
+        button = document.createElement("button");
+        button.className = "add-button";
+        button.innerText = 'Ajouter un lien';
+
+        let newButton = span.append(button);
+
+        collection.dataset.index = collection.querySelectorAll("input").length;
+
+        button.addEventListener("click", function(){
+            addButton(collection, newButton);
+        })
+    }
+
+    function addButton(collection, newButton){
+        let prototype = collection.dataset.prototype;
+
+        let index = collection.dataset.index;
+
+        prototype = prototype.replace(/__name__/g, index);
+
+        let content = document.createElement("html");
+        content.innerHTML = prototype;
+        let newForm = content.querySelector("div");
+
+        let deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = 'delete-button';
+        deleteButton.id = 'delete-video-'.index;
+        deleteButton.innerText = 'Supprimer ce lien';
+
+        newForm.append(deleteButton);
+
+        collection.dataset.index++;
+
+        let buttonAdd = collection.querySelector(".add-button");
+
+        span.insertBefore(newForm, buttonAdd);
+
+        deleteButton.addEventListener("click", function(){
+            this.previousElementSibling.parentElement.remove();
+        })
+    }
+</script>
+{% endblock %}

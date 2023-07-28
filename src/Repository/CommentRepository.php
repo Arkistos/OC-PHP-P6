@@ -41,10 +41,12 @@ class CommentRepository extends ServiceEntityRepository
         $data = $paginator->getQuery()->getResult();
 
         if(empty($data)){
-            return $result;
+            $pages = 1;
+        } else {
+            $pages = ceil($paginator->count()/$limit);
         }
 
-        $pages = ceil($paginator->count()/$limit);
+        
 
         $result['data'] = $data;
         $result['pages'] = $pages;

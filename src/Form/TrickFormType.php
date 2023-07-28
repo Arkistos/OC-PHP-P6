@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Group;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\VideoFormType;
 use Doctrine\DBAL\Types\StringType;
 use Monolog\Handler\GroupHandler;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -43,11 +44,19 @@ class TrickFormType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('videos', TextareaType::class, [
+            /*->add('videos', TextareaType::class, [
                 'label' => 'Vidéo',
                 'mapped' => false,
                 'required' => false,
-            ])
+            ])*/
+            ->add('videos', CollectionType::class, [
+                'entry_type' => VideoFormType::class,
+                'label' => 'Videos',
+                'entry_options' => ['label'=>false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
+            ]) 
         ;
     }
 

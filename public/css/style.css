@@ -1,0 +1,57 @@
+
+
+@import url(header.css);
+@import url(homepage.css);
+@import url(card.css);
+@import url(trick.css);
+@import url(security.css);
+
+body{
+    width: 100%;
+    margin-left: 0px;
+    margin-top: 0px;
+    background-color: var(--main-bg-color);
+
+    --main-color: #13324e;
+    --secondary-color: #f1600d;
+    --main-bg-color:#f0f7fd; 
+
+    --main-font: 'Anton', sans-serif;
+    --secondary-font: 'Poppins', sans-serif;
+}
+
+li{
+    list-style-type: none;
+}
+
+.alert-box{
+    position:absolute;
+    background-color: var(--main-bg-color);
+    border: #13324e 0.5px solid;
+    padding: 10px 20px 20px 20px;
+    border-radius: 10px;
+    font-family: var(--secondary-font);
+    color: var(--main-color);
+    right: 10px;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.alert-box a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.alert-box a:hover{
+    text-decoration: underline;
+}
+
+.input{
+    border: var(--main-color) 1px solid;
+    border-radius: 10px;
+    font-family: var(--secondary-font);
+    color: var(--main-color);
+    font-size: 20px;
+}

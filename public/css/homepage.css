@@ -1,0 +1,43 @@
+.hero{
+    background-image: url('../assets/images/hero.jpg');
+    background-size: 100vw auto;
+    background-repeat: no-repeat;
+    height: 80vh;
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    font-style: italic;
+    color: var(--main-color);
+}
+strong{
+    color: var(--secondary-color);
+}
+
+.hero-content{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1{
+    margin-top: -40px;
+    font-size: 6em;
+    cursor: default;
+}
+h2{
+    margin-top: -40px;
+    font-size: 2em;
+    cursor: default;
+}
+
+#list-tricks{
+    width: 80%;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 50px;
+}

@@ -64,8 +64,8 @@ class PictureService
 
         $path = $this->params->get('images_directory').$folder;
 
-        imagewebp($resizedPicture,$path.$width.'-'.$height.'-'.$fichier);
-        $picture->move($path .'/', $fichier);
+        imagewebp($resizedPicture,$path.'/'.$fichier);
+        //$picture->move($path .'/', $fichier);
 
         return $fichier;
     }

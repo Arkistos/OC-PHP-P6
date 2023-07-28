@@ -6,6 +6,7 @@ use App\Repository\GroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
@@ -19,6 +20,7 @@ class Group
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Trick::class, inversedBy: 'group')]
     private Collection $trick;
 
