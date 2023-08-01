@@ -13,13 +13,16 @@ class GroupFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+        $builder/*
         ->add('group', EntityType::class, options:[
             'class' => Group::class,
             'choice_label' => 'name',
             'mapped' => false,
             'multiple' =>true,
             'expanded' =>true,
+        ])*/
+        ->add('name', options:[
+            "label" => ''
         ])
         ;
     }

@@ -66,12 +66,8 @@ class TrickController extends AbstractController
 
         if($trickForm->isSubmitted() && $trickForm->isValid()) {
 
-
             /** Ajout des groupes */
-            $groups =  $trickForm->get('group')->getData();
-            foreach($groups as $group) {
-                $trick->addGroup($group);
-            }
+        
             /***** ******/
 
             /*** Ajout d'un lien  *
@@ -128,10 +124,16 @@ class TrickController extends AbstractController
         EntityManagerInterface $entityManagerInterface,
         SluggerInterface $sluggerInterface,
         GroupRepository $groupRepository,
-        PictureService $pictureService
+        PictureService $pictureService,
+
     ): Response {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+        $groups = $groupRepository->findAll();
+        $jsonGroups = $serializer->serialize($groups, 'json');
+        $jsonTrickGroup = $serializer->serialize($trick->getGroup(), 'json');
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
 
@@ -187,7 +189,9 @@ class TrickController extends AbstractController
 
         return $this->render('trick/edit.html.twig', [
             'trickForm'=> $trickForm->createView(),
-            'trick' => $trick
+            'trick' => $trick,
+            'jsonGroups' => $jsonGroups,
+            'jsonTrickGroup' => $jsonTrickGroup,
         ]);
     }
 
@@ -246,7 +250,7 @@ class TrickController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
 
-        if($pictureService->delete('300-300-'.$picture->getTrick()->getId().'-'.$picture->getId().'.webp', '/tricks_pictures', 300, 300)) {
+        if($pictureService->delete(''.$picture->getTrick()->getId().'-'.$picture->getId().'.webp', '/tricks_pictures', 300, 300)) {
             $entityManagerInterface->remove($picture);
             $entityManagerInterface->flush();
         }

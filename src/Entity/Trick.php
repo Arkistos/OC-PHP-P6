@@ -32,7 +32,7 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true)]
     private Collection $pictures;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick')]
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick', cascade:['persist'])]
     private Collection $group;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]

@@ -1,23 +1,46 @@
 
 <div class="informations-form">
 {{ form_start(trickForm)}}
-    {{ form_row(trickForm.name)}}
-    {{ form_row(trickForm.description)}}
-    {{ form_row(trickForm.group)}}
+    <div class="trick-form-field">
+        {{ form_label(trickForm.name)}}
+        {{ form_widget(trickForm.name)}}
+    </div>
+    
+    <div class="trick-form-field">
+        {{ form_label(trickForm.description)}}
+        {{ form_widget(trickForm.description)}}
+    </div>
+    
+    
+    <div id="groups" data-prototype="{{ form_row(trickForm.group.vars.prototype)|e('html_attr')  }}">
+        <div class="trick-form-field">
+            {{ form_label(trickForm.group)}}
+            {{ form_widget(trickForm.group)}}
+        </div>
+        
+        <span class="list-groups"></span>
+    </div>
+
+  
+
     {% if trick is defined %}
     {% for picture in trick.pictures %}
         <li>
-            <img src="{{asset('assets/uploads/tricks_pictures/300-300-' ~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <img src="{{asset('assets/uploads/tricks_pictures/' ~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
             <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
         </li>
     {% endfor %}
     {% endif %}
-    {{ form_row(trickForm.pictures)}}
+    <div class="trick-form-field">
+        {{ form_label(trickForm.pictures)}}
+        {{ form_widget(trickForm.pictures)}}
+    </div>
+    
 
         
-
-        <div id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
-            {{ form_row(trickForm.videos)}}
+        <div class="trick-form-field" id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
+            {{ form_label(trickForm.videos)}}
+            {{ form_widget(trickForm.videos)}}
             <span></span>
         </div>
 
@@ -37,11 +60,10 @@
 {% block javascript %}
 <script>
 
-    
-    //console.log(cat)
-
+    let groupsData = {{ jsonGroups|raw }};
 
     let collection, button, span;
+    let groupCollection, groupSpan, addGroupButton;
     window.onload = () => {
         collection = document.querySelector('#videos');
         span = collection.querySelector("span");
@@ -56,6 +78,40 @@
         button.addEventListener("click", function(){
             addButton(collection, newButton);
         })
+
+
+        groupCollection = document.querySelector('#groups');
+        groupSpan = groupCollection.querySelector("span");
+        field = groupCollection.querySelector(".trick-form-field");
+        addGroupButton = document.createElement("button");
+        addGroupButton.className = "add-group";
+        addGroupButton.innerText = 'Ajouter une catégorie';
+        addGroupButton.type = 'button';
+
+        let newGroupButton = field.append(addGroupButton);
+
+        groupCollection.dataset.index = groupCollection.querySelectorAll("input").length;
+
+        let groupInput = addGroup(groupCollection);
+
+        groupInput.addEventListener('input', function(e){
+            inputGroup(e.target);
+        })
+
+
+        addGroupButton.addEventListener("click", function(){
+            addGroup(groupCollection, newGroupButton, groupInput);
+        });
+        
+
+
+        /*** Gestion des catégories pour l'édition ****/
+        let previousGroups = document.querySelector('#trick_form_group');
+        inputs = previousGroups.querySelectorAll('input');
+        inputs.forEach((element)=>{
+            addGroup(groupCollection, newGroupButton, element)
+        })
+        previousGroups.innerHTML = '';
     }
 
     function addButton(collection, newButton){
@@ -87,5 +143,87 @@
             this.previousElementSibling.parentElement.remove();
         })
     }
+
+    function addGroup(collection, newGroupButton, input){
+        if(typeof input !== 'undefined' && input.value == ''){
+            return '';
+        }
+
+        let prototype = collection.dataset.prototype;
+        let index = collection.dataset.index;
+
+
+        prototype = prototype.replace(/__name__/g, index);
+
+        let content = document.createElement("html");
+        content.innerHTML = prototype;
+        let newForm = content.querySelector("div");
+        newFormLabel = newForm.querySelector("label");
+        newFormLabel.innerHTML = '';
+        newFormInput = newForm.querySelector("input");
+        let deleteGroup = document.createElement('span');
+        deleteGroup.innerText = 'X';
+        deleteGroup.className = 'delete-button'
+        deleteGroup.addEventListener('click', function(e){
+            e.target.parentElement.remove();
+        })
+        
+
+        collection.dataset.index++;
+        if(typeof input !== 'undefined'){
+            newForm.className = 'group-pills';
+            newFormInput.value = input.value;
+            input.value = '';
+            newFormInput.setAttribute('readonly', '');
+            newFormInput.style.width = newFormInput.value.length +1 + 'ch';
+            newForm.append(deleteGroup);
+            newFormInput.className = 'secondary-input-group';
+            groupSpan.append(newForm);
+            console.log(groupSpan);
+            closeList();
+        } else {
+            newFormInput.className = 'main-input-group';
+            field.insertBefore(newForm, addGroupButton);
+        }
+        
+        return newFormInput;
+
+    }
+
+    function inputGroup(input){
+        closeList();
+        list = document.createElement('div');
+        list.className = 'autocomplete-list';
+        input.parentNode.appendChild(list);
+        for(indexGroupsData=0; indexGroupsData<groupsData.length; indexGroupsData++){
+            if (groupsData[indexGroupsData].name.substr(0, input.value.length).toUpperCase() == input.value.toUpperCase()) {
+                listElement = document.createElement('div');
+                listElement.innerHTML = "<strong>" + groupsData[indexGroupsData].name.substr(0, input.value.length) + "</strong>";
+                listElement.innerHTML += groupsData[indexGroupsData].name.substr(input.value.length);
+          
+                listElement.innerHTML += "<input type='hidden' value='" + groupsData[indexGroupsData].name + "'>";
+                listElement.addEventListener("click", function(e) {
+                        input.value = this.getElementsByTagName("input")[0].value;
+                });
+                list.appendChild(listElement);
+            }
+        }
+        if(input.value == ''){
+            closeList();
+        }
+    }
+
+    function closeList(){
+        autocompleteList = document.querySelector('.autocomplete-list');
+        console.log(autocompleteList)
+        if(autocompleteList!= null){
+            autocompleteList.remove();
+        }
+        
+    }
 </script>
 {% endblock %}
+
+
+
+

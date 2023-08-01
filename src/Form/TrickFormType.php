@@ -23,23 +23,33 @@ class TrickFormType extends AbstractType
     {
         $builder
             ->add('name', options:[
-                'label'=>'Nom'
+                'label'=>'Nom',
             ])
             ->add('description')
             /*->add('group', CollectionType::class, [
                 'by_reference' => false,
                 'entry_type' => GroupFormType::class,
                 'allow_add' =>true
-            ])*/
+            ])*
             ->add('group', EntityType::class, options:[
                 'class' => Group::class,
                 'choice_label' => 'name',
                 'mapped' => false,
                 'multiple' =>true,
                 'expanded' =>true,
+            ])*/
+            ->add('group', CollectionType::class, [
+                'entry_type' => GroupFormType::class,
+                'label' => 'Catégorie',
+                'entry_options' => ['label'=>false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'required' => false
+                
             ])
             ->add('pictures', FileType::class, [
-                'label' => false,
+                'label' => 'Images',
                 'multiple' =>true,
                 'mapped' => false,
                 'required' => false,
