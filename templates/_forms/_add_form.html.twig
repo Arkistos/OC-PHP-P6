@@ -149,6 +149,18 @@
             return '';
         }
 
+        html = `<div>
+                    <label for="trick_form_group_1_name"></label>
+                    <input 
+                        type="text" 
+                        id="trick_form_group_1_name" 
+                        name="trick_form[group][1][name]" 
+                        maxlength="255" 
+                        readonly="" 
+                        class="secondary-input-group" 
+                        style="width: 6ch;">
+                </div>`
+
         let prototype = collection.dataset.prototype;
         let index = collection.dataset.index;
 
@@ -191,11 +203,15 @@
     }
 
     function inputGroup(input){
+        autocompleteList = document.querySelector('.autocomplete-list');
+        console.log('1', autocompleteList)
         closeList();
+        console.log('2', autocompleteList);
         list = document.createElement('div');
         list.className = 'autocomplete-list';
         input.parentNode.appendChild(list);
         for(indexGroupsData=0; indexGroupsData<groupsData.length; indexGroupsData++){
+            console.log(groupsData[indexGroupsData]);
             if (groupsData[indexGroupsData].name.substr(0, input.value.length).toUpperCase() == input.value.toUpperCase()) {
                 listElement = document.createElement('div');
                 listElement.innerHTML = "<strong>" + groupsData[indexGroupsData].name.substr(0, input.value.length) + "</strong>";
@@ -208,6 +224,7 @@
                 list.appendChild(listElement);
             }
         }
+        console.log(3, list);
         if(input.value == ''){
             closeList();
         }

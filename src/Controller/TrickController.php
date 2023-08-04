@@ -21,6 +21,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,11 +37,52 @@ class TrickController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function index(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->findAll();
+        //$tricks = $trickRepository->findAll();
+        $tricksPaginated = $trickRepository->findTricksPaginated(1);
 
         return $this->render('trick/homepage.html.twig', [
-            'tricks' => $tricks
+            'tricks' =>  $tricksPaginated['data'],
+            'pages' =>  $tricksPaginated['pages']
         ]);
+    }
+
+    #[Route('/json-tricks/{page}', name:'app_json_tricks')]
+    public function jsonTricks(
+        int $page,
+        TrickRepository $trickRepository
+    ):Response
+    {   
+       /*
+        $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+        $tricks = $trickRepository->findAll();
+        $jsonGroups = $serializer->serialize($tricks, 'json');*/
+        $tricks = $trickRepository->findTricksPaginated($page)['data'];
+        $jsonTricks = [];
+
+        
+        foreach($tricks as $trick){
+            $tabTrick = [
+                'id' => $trick->getId(),
+                'name' => $trick->getName(),
+                'slug' => $trick->getSlug(),
+            ];
+            $tabGroup = [];
+            foreach($trick->getGroup() as $group){
+                array_push($tabGroup, $group->getName());
+            }
+            $tabTrick['groups'] = $tabGroup;
+
+            if(count($trick->getPictures())>0){
+                $tabTrick['pic'] = $trick->getPictures()[0]->getId();
+            }
+
+            array_push($jsonTricks, $tabTrick);
+        }
+
+        $str_json = json_encode($jsonTricks, JSON_FORCE_OBJECT);
+       
+        return new jsonResponse($str_json);
     }
 
     #[Route('/trick/add', name:'app_trick_add')]

@@ -42,7 +42,14 @@
         {% endif %}
         <div class="comment-list">
         {% for comment in comments.data %}
-            <li class="comment-content"><strong>{{comment.user.username}} le {{comment.createdAt|date('d-m-Y')}}</strong> : {{comment.content}}</li>
+            <li class="comment-content">
+                {% if comment.user.profilePic == '' %}
+                <img src="{{asset('assets/uploads/profile_pics/default-profile-pic.png')}}" alt="Photo de profile par défaut">
+                {% else %}
+                <img src="{{asset('assets/uploads/profile_pics/' ~ comment.user.profilePic ~ '.webp')}}" alt="Photo de profile de {{comment.user.username}}">
+                {% endif %}
+                <strong>{{comment.user.username}} le {{comment.createdAt|date('d-m-Y')}}</strong> : {{comment.content}}
+            </li>
         {% endfor %}
         </div>
         {% if comments.pages > 1 %}

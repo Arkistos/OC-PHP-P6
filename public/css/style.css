@@ -7,6 +7,10 @@
 @import url(security.css);
 @import url(form.css);
 
+html{
+    scroll-behavior: smooth;
+}
+
 body{
     width: 100%;
     margin-left: 0px;
@@ -19,6 +23,7 @@ body{
 
     --main-font: 'Anton', sans-serif;
     --secondary-font: 'Poppins', sans-serif;
+
 }
 
 li{
@@ -55,4 +60,16 @@ li{
     font-family: var(--secondary-font);
     color: var(--main-color);
     font-size: 20px;
+}
+
+footer{
+    height: 100px;
+    font-family: var(--main-font);
+    color: var(--main-color);
+    background-color: var(--main-bg-color);
+    border-top: var(--secondary-color) 0.5px solid;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }

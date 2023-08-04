@@ -1,7 +1,7 @@
 .card{
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     border-radius: 25px;
     background: #f0f7fd;
     box-shadow:  25px 25px 50px #ccd2d7,
@@ -30,7 +30,7 @@
 
 .card-picture{
     height: 150px;
-    width: 250px;
+    width: 200px;
 
     object-fit: cover;
     position:absolute;
@@ -38,9 +38,9 @@
 }
 
 .card-name{
-    z-index: 10;
+    z-index: 5;
     position: absolute;
-    bottom: 40px;
+    bottom: 0px;
     font-family: var(--main-font);
     left: 10px
 }

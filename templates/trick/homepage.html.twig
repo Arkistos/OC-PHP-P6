@@ -1,19 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TrickController!{% endblock %}
+{% block title %}SnowTricks - Page d'accueil{% endblock %}
 
 {% block body %}
 <div class="hero">
     <div class="hero-content">
-    <h1>Snow <strong>Tricks</strong></h1>
-    <h2>Préparez-vous à faire le grand saut !</h2>
+        <h1>Snow <strong>Tricks</strong></h1>
+        <h2>Préparez-vous à faire le grand saut !</h2>
+        <a href="#list-tricks"><img class="cta" src="{{asset('assets/images/down-arrow.png')}}" alt=""></a>
+    </div>
 </div>
-</div>
-{% if app.user %}
 
-{% endif %}
+<div id="modal">
+    <h1 class="modal-content">Voulez-vous Supprimer la figure <span id="trickName">Nom_de_figure</span></h1>
+    <div class="modal-buttons">
+        <a class="modal-button" id="modal-delete-trick" href="#">Supprimer</a>
+        <div class="modal-button" id="modal-cancel">Annuler</div>
+    </div>
+    
+    <div id="modal-close">X</div>
+</div>
+
+
 <div id="list-tricks">
-
+{% if app.user %}
     <div class="card">
         <div>
             <img class="card-picture" src="{{asset('assets/images/icon-add.png')}}" alt="">
@@ -21,6 +31,7 @@
         <h3 class="card-name"><a href="{{path('app_trick_add')}}">Ajouter une figure</a></h3>
     </div>
 
+    {% endif %}
 {%  for trick in tricks %}
     <div class="card">
         <div class="list-pills">
@@ -41,10 +52,130 @@
         {% if app.user %}
         <div class="card-management">   
             <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
-            <a href="trick/remove/{{trick.slug}}"><img src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
+            <!--a href="trick/remove/{{trick.slug}}"--> 
+                <img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt="">
+            <!--/a-->
         </div>
         {% endif %}
     </div>
 {% endfor %}
 </div>
+<div class="cta-bottom">
+    <a href="#list-tricks"><img class="cta cta-up" src="{{asset('assets/images/down-arrow.png')}}" alt=""></a>
+
+{% if pages >1 %}
+    <div class="button-load">Charger plus de figures</div>
+{% endif %}
+</div>
+
+
+
+    <script>
+        window.onload = () => {
+            let modal = document.querySelector("#modal");
+            let closeButton = document.querySelector("#modal-close");
+            let cancelButton = document.querySelector("#modal-cancel");
+            let deleteLinks = document.querySelectorAll('.delete-button');
+            let loadButton = document.querySelector('.button-load');
+            let page = 1;
+            let pages = {{pages}};
+
+            closeButton.addEventListener("click", function(e){
+                closeModal();
+            })
+
+            cancelButton.addEventListener("click", function(){
+                closeModal();
+            })
+
+            deleteLinks.forEach((link)=>{
+                link.addEventListener('click', function(e){
+                    displayModal(e.target.id, e.target.getAttribute('slug'));
+                })
+            })
+
+            loadButton.addEventListener('click', function(e){
+                document.querySelector('.cta-up').style.display = 'block';
+                page ++;
+                if (page>=pages){
+                    e.target.remove();
+                }
+
+                fetch('/json-tricks/'+page, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(function(response){
+                    return response.json();
+                })
+                .then((response)=>{
+                    tricks = JSON.parse(response);
+
+                    for (const key in tricks){
+                        let newCard = document.createElement('div');
+                        if(tricks.hasOwnProperty(key)){
+                            newCard.className= 'card';
+                            newListPills = document.createElement('div');
+                            newListPills.className = 'list-pills';
+                            newCard.append(newListPills);
+                            for(const groupKey in tricks[key]['groups']){
+                                if(tricks[groupKey]['groups'].hasOwnProperty(groupKey)){
+                                    newListPills.innerHTML +='<li class="pills">'+ tricks[key]['groups'][groupKey] +'</li>'
+                                }
+                            }
+                            newImg = document.createElement('div');
+                            newImgtag = document.createElement('img');
+                            newImgtag.className = 'card-picture';
+                            let id = tricks[key]['id'];
+                            let pics = tricks[key]['pic'];
+                            
+                            if(pics === undefined){
+                                newImgtag.src = "{{asset('assets/uploads/tricks_pictures/default-picture.png')}}";
+                            } else {
+                                newImgtag.src = "assets/uploads/tricks_pictures/"+ id +"-"+ pics +".webp"
+                            } 
+                            newImg.append(newImgtag);
+                            newCard.append(newImg);
+
+                            let cardName = document.createElement('h3');
+                            cardName.className ='card-name';
+                            cardName.innerHTML = '<a href="trick/'+tricks[key]['slug']+'">'+tricks[key]['name']+'</a>'
+                            newCard.append(cardName);
+
+                            let cardManagement = document.createElement('div');
+                            cardManagement.className = 'card-management';
+                            cardManagement.innerHTML = '<a href="trick/edit/' + tricks[key]['slug'] + '"><img src="assets/images/icon-edit.png" alt=""></a><img class="delete-button" id='+ tricks[key]['name'] +' slug='+ tricks[key]['slug'] +' src="assets/images/icon-trash.png" alt="">'
+
+                            newCard.append(cardManagement);
+
+
+                            
+                        }
+                        let listTricks = document.querySelector('#list-tricks');
+                        listTricks.append(newCard);
+                    }
+
+                    
+                })
+            })
+
+        }
+
+        function displayModal(trickName, trickSlug){
+            
+            let modalTrickName = document.querySelector("#trickName");
+            let deleteTrickButton = document.querySelector("#modal-delete-trick");
+            modalTrickName.innerHTML = trickName;
+            deleteTrickButton.href = 'trick/remove/'+trickSlug;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal(){
+            modal.style.display = 'none';
+        }
+    </script>
+    
 {% endblock %}
