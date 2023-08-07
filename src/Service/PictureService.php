@@ -20,11 +20,11 @@ class PictureService
         $fichier = $name. '.webp';
 
         $pictureInfos = getimagesize($picture);
-        if($pictureInfos === false){
+        if($pictureInfos === false) {
             throw new Exception('Format d\'image incorect');
         }
 
-        switch($pictureInfos['mime']){
+        switch($pictureInfos['mime']) {
             case 'image/png':
                 $pictureSource = imagecreatefrompng($picture);
                 break;
@@ -41,7 +41,7 @@ class PictureService
         $imageWidth = $pictureInfos[0];
         $imageHeight = $pictureInfos[1];
 
-        switch($imageWidth <=> $imageHeight){
+        switch($imageWidth <=> $imageHeight) {
             case -1:
                 $squareSize = $imageWidth;
                 $srcX = 0;
@@ -60,11 +60,11 @@ class PictureService
         }
 
         $resizedPicture = imagecreatetruecolor($width, $height);
-        imagecopyresampled($resizedPicture, $pictureSource,0,0,$srcX,$srcY,$width,$height,$squareSize,$squareSize);
+        imagecopyresampled($resizedPicture, $pictureSource, 0, 0, $srcX, $srcY, $width, $height, $squareSize, $squareSize);
 
         $path = $this->params->get('images_directory').$folder;
 
-        imagewebp($resizedPicture,$path.'/'.$fichier);
+        imagewebp($resizedPicture, $path.'/'.$fichier);
         //$picture->move($path .'/', $fichier);
 
         return $fichier;

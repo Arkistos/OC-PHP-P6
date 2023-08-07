@@ -51,7 +51,7 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    private function createVideo(string $link, string $trickSlug, ObjectManager $objectManager):void
+    private function createVideo(string $link, string $trickSlug, ObjectManager $objectManager): void
     {
         $video = new Video();
         $video->setLink($link);

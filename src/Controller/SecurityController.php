@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-             return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('app_homepage');
         }
 
         // get the login error if there is one
@@ -42,20 +42,19 @@ class SecurityController extends AbstractController
 
     #[Route(path:'forgottenpassword', name:'app_forgotten_password')]
     public function forgottenPassword(
-        Request $request, 
-        UserRepository $userRepository, 
+        Request $request,
+        UserRepository $userRepository,
         TokenGeneratorInterface $tokenGeneratorInterface,
         EntityManagerInterface $entityManagerInterface,
         SendMailService $sendMailService
-        ):Response
-    {
+    ): Response {
         $form = $this->createForm(ResetPasswordRequestType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid()) {
             $user = $userRepository->findOneByEmail($form->get('email')->getData());
-            
-            if($user){
+
+            if($user) {
                 $token = $tokenGeneratorInterface->generateToken();
                 $user->setResetToken($token);
                 $entityManagerInterface->persist($user);
@@ -73,12 +72,12 @@ class SecurityController extends AbstractController
                 );
                 /** Ajouter message de succès */
                 return $this->redirectToRoute('app_login');
-                
+
             }
             /**** Ajouter un message d'erreur l'utilisateur n'existe pas ****/
         }
 
-        return $this->render('security/reset_password_request.html.twig',[
+        return $this->render('security/reset_password_request.html.twig', [
             'requestPasswordForm' => $form->createView()
         ]);
     }
@@ -90,10 +89,9 @@ class SecurityController extends AbstractController
         UserRepository $userRepository,
         EntityManagerInterface $entityManagerInterface,
         UserPasswordHasherInterface $userPasswordHasherInterface
-        ):Response
-    {
+    ): Response {
         $user = $userRepository->findOneByResetToken($token);
-        if($user){
+        if($user) {
             $form = $this->createForm(ResetPasswordType::class);
 
             $form->handleRequest($request);
@@ -101,7 +99,7 @@ class SecurityController extends AbstractController
                 $user->setResetToken('');
                 $user->setPassword(
                     $userPasswordHasherInterface->hashPassword(
-                        $user, 
+                        $user,
                         $form->get('password')->getData()
                     )
                 );

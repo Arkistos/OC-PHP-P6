@@ -25,7 +25,7 @@ class GroupFormType extends AbstractType
         ->add('id', HiddenType::class, options:[
             'attr' => [
                 'class' => 'group-id'
-            ] 
+            ]
         ])
         ->add('name', HiddenType::class, options:[
             'attr' => [

@@ -147,12 +147,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getResetToken():?string
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
 
-    public function setResetToken(string $resetToken):self
+    public function setResetToken(string $resetToken): self
     {
         $this->resetToken = $resetToken;
 
@@ -200,5 +200,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
 }

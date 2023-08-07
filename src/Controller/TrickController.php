@@ -51,30 +51,29 @@ class TrickController extends AbstractController
     public function jsonTricks(
         int $page,
         TrickRepository $trickRepository
-    ):Response
-    {   
-       /*
-        $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
-        $tricks = $trickRepository->findAll();
-        $jsonGroups = $serializer->serialize($tricks, 'json');*/
+    ): Response {
+        /*
+         $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+         $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+         $tricks = $trickRepository->findAll();
+         $jsonGroups = $serializer->serialize($tricks, 'json');*/
         $tricks = $trickRepository->findTricksPaginated($page)['data'];
         $jsonTricks = [];
 
-        
-        foreach($tricks as $trick){
+
+        foreach($tricks as $trick) {
             $tabTrick = [
                 'id' => $trick->getId(),
                 'name' => $trick->getName(),
                 'slug' => $trick->getSlug(),
             ];
             $tabGroup = [];
-            foreach($trick->getGroup() as $group){
+            foreach($trick->getGroup() as $group) {
                 array_push($tabGroup, $group->getName());
             }
             $tabTrick['groups'] = $tabGroup;
 
-            if(count($trick->getPictures())>0){
+            if(count($trick->getPictures())>0) {
                 $tabTrick['pic'] = $trick->getPictures()[0]->getId();
             }
 
@@ -82,7 +81,7 @@ class TrickController extends AbstractController
         }
 
         $str_json = json_encode($jsonTricks, JSON_FORCE_OBJECT);
-       
+
         return new jsonResponse($str_json);
     }
 
@@ -95,7 +94,7 @@ class TrickController extends AbstractController
         PictureService $pictureService,
         VideoService $videoService
     ): Response {
-        
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
@@ -112,8 +111,8 @@ class TrickController extends AbstractController
             /** Ajout des groupes */
             $trick->getGroup()->clear();
             $groups = $trickForm->get('group')->getData();
-            foreach($groups as $group){
-                if(!$group->getId()){
+            foreach($groups as $group) {
+                if(!$group->getId()) {
                     $g = new Group();
                     $g->setName($group->getName());
                 } else {
@@ -121,7 +120,7 @@ class TrickController extends AbstractController
                 }
                 $trick->addGroup($g);
             }
-        
+
             /***** ******/
 
             /*** Ajout d'un lien  *
@@ -180,7 +179,6 @@ class TrickController extends AbstractController
         SluggerInterface $sluggerInterface,
         GroupRepository $groupRepository,
         PictureService $pictureService,
-
     ): Response {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -200,8 +198,8 @@ class TrickController extends AbstractController
 
             $trick->getGroup()->clear();
             $groups = $trickForm->get('group')->getData();
-            foreach($groups as $group){
-                if(!$group->getId()){
+            foreach($groups as $group) {
+                if(!$group->getId()) {
                     $g = new Group();
                     $g->setName($group->getName());
                 } else {
@@ -210,7 +208,7 @@ class TrickController extends AbstractController
                 $trick->addGroup($g);
             }
 
-            
+
 
             $images = $trickForm->get('pictures')->getData();
 
@@ -278,9 +276,9 @@ class TrickController extends AbstractController
         $commentForm->handleRequest($request);
 
 
-        
+
         if($this->getUser() && $commentForm->isSubmitted() && $commentForm->isValid()) {
-            
+
             $comment->setCreatedAt(new DateTimeImmutable());
             $comment->setUser($this->getUser());
             $comment->setTrick($trick);

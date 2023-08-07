@@ -11,30 +11,30 @@ use Faker;
 class UserFixtures extends Fixture
 {
     public function __construct(
-        private UserPasswordHasherInterface $userPasswordHasherInterface)
-    {
-        
+        private UserPasswordHasherInterface $userPasswordHasherInterface
+    ) {
+
     }
 
     public function load(ObjectManager $manager): void
     {
-        
+
         $user = new User();
         $user->setEmail('pierre.lacaud@gmail.com');
         $user->setUsername("Pierre");
         $user->setPassword(
-            $this->userPasswordHasherInterface->hashPassword($user,'testing')
+            $this->userPasswordHasherInterface->hashPassword($user, 'testing')
         );
         $manager->persist($user);
 
         $faker = Faker\Factory::create('fr_FR');
 
-        for($fakeUser = 1; $fakeUser <=5; $fakeUser++){
+        for($fakeUser = 1; $fakeUser <=5; $fakeUser++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setUsername($faker->name());
             $user->setPassword(
-                $this->userPasswordHasherInterface->hashPassword($user,'testing')
+                $this->userPasswordHasherInterface->hashPassword($user, 'testing')
             );
             $manager->persist($user);
             $this->addReference($fakeUser, $user);

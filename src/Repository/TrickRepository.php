@@ -40,7 +40,7 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
-    public function findTricksPaginated(int $page, int $limit = 15):array
+    public function findTricksPaginated(int $page, int $limit = 15): array
     {
         $limit = abs($limit);
 
@@ -51,17 +51,17 @@ class TrickRepository extends ServiceEntityRepository
             ->from('App\Entity\Trick', 't')
             ->setMaxResults($limit)
             ->setFirstResult(($page*$limit)-$limit);
-        
+
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
 
-        if(empty($data)){
+        if(empty($data)) {
             $pages = 1;
         } else {
             $pages = ceil($paginator->count()/$limit);
         }
 
-        
+
 
         $result['data'] = $data;
         $result['pages'] = $pages;
@@ -71,28 +71,28 @@ class TrickRepository extends ServiceEntityRepository
         return $result;
     }
 
-//    /**
-//     * @return Trick[] Returns an array of Trick objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Trick[] Returns an array of Trick objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('t.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Trick
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Trick
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

@@ -34,7 +34,7 @@ class Group
         return $this->id;
     }
 
-    public function setId($id):static
+    public function setId($id): static
     {
         $this->id = $id;
         return $this;

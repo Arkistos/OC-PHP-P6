@@ -8,7 +8,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class GroupFixtures extends Fixture
 {
-
     public function load(ObjectManager $manager): void
     {
         $this->createGroup('Grabs', $manager);
@@ -19,7 +18,7 @@ class GroupFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createGroup(string $groupeName, ObjectManager $manager):void
+    private function createGroup(string $groupeName, ObjectManager $manager): void
     {
         $group = new Group();
         $group->setName($groupeName);
