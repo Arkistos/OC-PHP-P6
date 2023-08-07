@@ -1,5 +1,5 @@
 
-<div class="informations-form">
+<div class="trick-form">
 {{ form_start(trickForm)}}
     <div class="trick-form-field">
         {{ form_label(trickForm.name)}}
@@ -15,22 +15,19 @@
     <div id="groups" data-prototype="{{ form_row(trickForm.group.vars.prototype)|e('html_attr')  }}">
         <div class="trick-form-field">
             {{ form_label(trickForm.group)}}
-            {{ form_widget(trickForm.group)}}
+                {{ form_widget(trickForm.group)}}
+                <div>
+                    <input type="text" class="group-autocomplete-input">
+                    <div class="group-autocomplete-list"></div>
+                </div>
+            <button type="button" class="group-add-button">Ajouter</button>
         </div>
-        
         <span class="list-groups"></span>
     </div>
 
   
 
-    {% if trick is defined %}
-    {% for picture in trick.pictures %}
-        <li>
-            <img src="{{asset('assets/uploads/tricks_pictures/' ~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
-            <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
-        </li>
-    {% endfor %}
-    {% endif %}
+    
     <div class="trick-form-field">
         {{ form_label(trickForm.pictures)}}
         {{ form_widget(trickForm.pictures)}}
@@ -44,15 +41,8 @@
             <span></span>
         </div>
 
-    {% if trick is defined %}
-    {% for video in trick.videos %}
-        <li>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <a href="/video/remove/{{video.getId}}">Supprimer</a>
-        </li>
-    {% endfor %}
-    {% endif %}
-    <button type="submit">Valider</button>
+    
+    <button class="submit-button" type="submit">Valider</button>
 {{ form_end(trickForm)}}
 
 </div>
@@ -64,6 +54,7 @@
 
     let collection, button, span;
     let groupCollection, groupSpan, addGroupButton;
+    let groupAutocompleteInput, groupAutocompleteList, groupAddButton;
     window.onload = () => {
         collection = document.querySelector('#videos');
         span = collection.querySelector("span");
@@ -79,39 +70,28 @@
             addButton(collection, newButton);
         })
 
+        //Gestion des groups
+        groupAutocompleteInput = document.querySelector('.group-autocomplete-input');
+        groupAutocompleteList = document.querySelector('.group-autocomplete-list');
+        groupAddButton = document.querySelector('.group-add-button');
+        document.querySelector('#groups').dataset.index = 0;
 
-        groupCollection = document.querySelector('#groups');
-        groupSpan = groupCollection.querySelector("span");
-        field = groupCollection.querySelector(".trick-form-field");
-        addGroupButton = document.createElement("button");
-        addGroupButton.className = "add-group";
-        addGroupButton.innerText = 'Ajouter une catégorie';
-        addGroupButton.type = 'button';
+        groupAutocompleteInput.addEventListener('input', autocompleteInputChange);
 
-        let newGroupButton = field.append(addGroupButton);
-
-        groupCollection.dataset.index = groupCollection.querySelectorAll("input").length;
-
-        let groupInput = addGroup(groupCollection);
-
-        groupInput.addEventListener('input', function(e){
-            inputGroup(e.target);
-        })
-
-
-        addGroupButton.addEventListener("click", function(){
-            addGroup(groupCollection, newGroupButton, groupInput);
-        });
+        groupAddButton.addEventListener("click", onClickAddGroup);
         
-
-
+        
         /*** Gestion des catégories pour l'édition ****/
-        let previousGroups = document.querySelector('#trick_form_group');
-        inputs = previousGroups.querySelectorAll('input');
-        inputs.forEach((element)=>{
-            addGroup(groupCollection, newGroupButton, element)
-        })
-        previousGroups.innerHTML = '';
+        const existingGroups = document.querySelectorAll('div[id^="trick_form_group_"]');
+        
+        existingGroups.forEach(element => {
+            const id = element.querySelector('input.group-id').value
+            const name = element.querySelector('input.group-name').value
+            console.log(id, name);
+            const prototype = getGroupPrototype();
+                addGroupPills(prototype,{id, name});
+            })
+            document.querySelector('#trick_form_group').remove();
     }
 
     function addButton(collection, newButton){
@@ -144,71 +124,96 @@
         })
     }
 
-    function addGroup(collection, newGroupButton, input){
-        if(typeof input !== 'undefined' && input.value == ''){
+    function onClickAddGroup(){
+        if(groupAutocompleteInput.value == ''){
             return '';
         }
 
-        html = `<div>
-                    <label for="trick_form_group_1_name"></label>
-                    <input 
-                        type="text" 
-                        id="trick_form_group_1_name" 
-                        name="trick_form[group][1][name]" 
-                        maxlength="255" 
-                        readonly="" 
-                        class="secondary-input-group" 
-                        style="width: 6ch;">
-                </div>`
+        const prototype = getGroupPrototype();
+        const group = getGroupValue();
 
-        let prototype = collection.dataset.prototype;
-        let index = collection.dataset.index;
+        addGroupPills(prototype, group);
+    }
 
-
-        prototype = prototype.replace(/__name__/g, index);
-
-        let content = document.createElement("html");
-        content.innerHTML = prototype;
-        let newForm = content.querySelector("div");
-        newFormLabel = newForm.querySelector("label");
-        newFormLabel.innerHTML = '';
-        newFormInput = newForm.querySelector("input");
-        let deleteGroup = document.createElement('span');
-        deleteGroup.innerText = 'X';
-        deleteGroup.className = 'delete-button'
-        deleteGroup.addEventListener('click', function(e){
-            e.target.parentElement.remove();
-        })
+    function addGroupPills(prototype, group){
+        const groupPill = createGroupPill(prototype, group);
         
+        document
+            .querySelector('span.list-groups')
+            .append(groupPill);
 
-        collection.dataset.index++;
-        if(typeof input !== 'undefined'){
-            newForm.className = 'group-pills';
-            newFormInput.value = input.value;
-            input.value = '';
-            newFormInput.setAttribute('readonly', '');
-            newFormInput.style.width = newFormInput.value.length +1 + 'ch';
-            newForm.append(deleteGroup);
-            newFormInput.className = 'secondary-input-group';
-            groupSpan.append(newForm);
-            console.log(groupSpan);
-            closeList();
-        } else {
-            newFormInput.className = 'main-input-group';
-            field.insertBefore(newForm, addGroupButton);
+        groupAutocompleteInput.value = '';
+        groupAutocompleteList.innerHTML = '';
+    }
+
+    function getGroupPrototype(){
+        const groupsArea = document.querySelector('#groups');
+        const {prototype, index} = groupsArea.dataset;
+        console.log(groupsArea);
+        const groupPrototype = prototype.replace(/__name__/g, index);
+        groupsArea.dataset.index++;
+        return groupPrototype;
+    }
+
+    function getGroupValue(){
+        const inputValue = groupAutocompleteInput.value;
+        let group = groupsData.find((item)=> inputValue === item.name);
+        if(!group){
+            return {id:'', name:inputValue}
         }
-        
-        return newFormInput;
+        return group
+    }
+
+    function createGroupPill(prototype, group){
+        const html = `
+            <div>
+                ${prototype}
+                <span>${group.name}</span>
+                <span class='delete-group-button'>X</span>
+            </div>
+        `;
+
+        groupPill = document.createElement('html');
+        groupPill.innerHTML = html;
+        groupPill = groupPill.querySelector('div');
+        groupPill.querySelector('input.group-id').value = group.id;
+        groupPill.querySelector('input.group-name').value = group.name;
+        groupPill.querySelector('.delete-group-button').addEventListener('click', function(e){
+            e.target.parentElement.remove();
+        });
+        return groupPill;
+    }
+
+    function autocompleteInputChange(){
+        if(groupAutocompleteInput.value === ''){
+            groupAutocompleteList.innerHTML='';
+            return;
+        }
+
+        const regex = new RegExp(`${groupAutocompleteInput.value}`, 'i');
+            groupAutocompleteList.innerHTML = groupsData
+                .filter(item => regex.test(item.name))
+                .map(item => `<div class="group-autocomplete-option" data-id="${item.id}" data-name="${item.name}">
+                    ${item.name.replace(regex, (char) => `<strong>${char}</strong>`)}
+                </div>`)
+                .join('');
+
+        groupAutocompleteList
+            .querySelectorAll('.group-autocomplete-option')
+            .forEach((option)=>option.addEventListener('click', function(e){
+                const prototype = getGroupPrototype();
+                const {id, name} = e.target.dataset;
+                addGroupPills(prototype, {id, name});
+            }))
 
     }
 
+
+
+
     function inputGroup(input){
-        autocompleteList = document.querySelector('.autocomplete-list');
-        console.log('1', autocompleteList)
         closeList();
-        console.log('2', autocompleteList);
-        list = document.createElement('div');
-        list.className = 'autocomplete-list';
+        list = document.querySelector('.group-autocomplete-list');
         input.parentNode.appendChild(list);
         for(indexGroupsData=0; indexGroupsData<groupsData.length; indexGroupsData++){
             console.log(groupsData[indexGroupsData]);

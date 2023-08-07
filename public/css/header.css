@@ -10,6 +10,17 @@
     position: absolute;
     top: 0px;
 }
+.header img{
+    height: 60px;
+}
+
+.header-img{
+    display: none;
+}
+
+.header-text{
+    display: block;
+}
 
 .logo{
     height: 60px;
@@ -36,11 +47,28 @@ nav a:hover{
         margin-left: 0px;
         width: 100vw;
         position: fixed;
-        height: 30px;
+        height: 100px;
         bottom: 0px;
         top: auto;
-        z-index: 50px;
+        z-index: 500;
         background-color: var(--main-bg-color);
+    }
+
+    nav{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .header-text{
+        display: none;
+    }
+
+    .header-img{
+        display: block;
     }
 
     .logo{

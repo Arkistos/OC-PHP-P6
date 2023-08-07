@@ -6,6 +6,7 @@ use App\Entity\Group;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,8 +22,15 @@ class GroupFormType extends AbstractType
             'multiple' =>true,
             'expanded' =>true,
         ])*/
-        ->add('name', options:[
-            "label" => ''
+        ->add('id', HiddenType::class, options:[
+            'attr' => [
+                'class' => 'group-id'
+            ] 
+        ])
+        ->add('name', HiddenType::class, options:[
+            'attr' => [
+                'class' => 'group-name'
+            ]
         ])
         ;
     }

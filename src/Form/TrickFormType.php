@@ -25,7 +25,7 @@ class TrickFormType extends AbstractType
             ->add('name', options:[
                 'label'=>'Nom',
             ])
-            ->add('description')
+            ->add('description', TextareaType::class)
             /*->add('group', CollectionType::class, [
                 'by_reference' => false,
                 'entry_type' => GroupFormType::class,

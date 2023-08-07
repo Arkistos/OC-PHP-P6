@@ -1,23 +1,10 @@
-.trick-form-content{
-    margin: 200px auto;
+
+
+.group-add-button{
+    height: 25px;
 }
 
-.trick-form-content h1{
-    font-style: italic;
-    font-family: var(--main-font);
-    color: var(--main-color);
-    text-align: center;
-    font-size: 50px;
-    margin-bottom: -150px;
-}
-.trick-form-field{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-input{
+input, textarea{
     font-family: var(--main-font);
     color: var(--main-color);
     border-color: var(--secondary-color);

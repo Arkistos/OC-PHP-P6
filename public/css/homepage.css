@@ -110,7 +110,7 @@ h2{
     cursor: pointer;
 }
 
-#list-tricks{
+#list-trickssss{
     width: 90%;
     margin: 50px auto;
     display: flex;
@@ -119,6 +119,18 @@ h2{
     justify-content: space-around;
     gap: 50px;
     position: relative;
+}
+
+#list-tricks{
+    width: 90%;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-around;
+    align-items: space-around;
+    justify-items: center;
+    align-items: center;
+    row-gap: 50px;
 }
 
 .button-load{
@@ -131,7 +143,36 @@ h2{
     text-align: center;
 }
 
-@media screen and (max-width: 500px ){
-    
+@media screen and (max-width: 1000px ){
+    #list-tricks{
+        grid-template-columns: auto auto;
+    }
 
+}
+
+@media screen and (max-width: 500px ){
+    .hero{
+        background-size: 300vw auto;
+        height: 70vh;
+        width: 100vw;
+    }
+    .hero-content{
+        width: 90%;
+        height: 100%;
+    }
+
+    .cta{
+        width: 60px;
+        height: 60px;
+        border: 10px var(--secondary-color) solid;
+        border-radius: 50px;
+        position: absolute;
+        right: 0px;
+        bottom: 30vh;
+        cursor: pointer;
+    }
+
+    #list-tricks{
+        grid-template-columns: auto;
+    }
 }

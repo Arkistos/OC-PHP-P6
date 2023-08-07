@@ -6,13 +6,16 @@
 @import url(trick.css);
 @import url(security.css);
 @import url(form.css);
+@import url(trick-form.css);
 
 html{
     scroll-behavior: smooth;
+    width: 100vw;
 }
 
 body{
-    width: 100%;
+    width: 100vw;
+    overflow-x: hidden;
     margin-left: 0px;
     margin-top: 0px;
     background-color: var(--main-bg-color);
@@ -72,4 +75,11 @@ footer{
     display: flex;
     align-items: center;
     justify-content: flex-start;
+}
+
+@media screen and (max-width: 500px ){
+
+    footer{
+        margin-bottom: 100px;
+    }
 }

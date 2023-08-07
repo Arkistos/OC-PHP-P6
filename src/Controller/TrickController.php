@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Group;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
@@ -109,6 +110,17 @@ class TrickController extends AbstractController
         if($trickForm->isSubmitted() && $trickForm->isValid()) {
 
             /** Ajout des groupes */
+            $trick->getGroup()->clear();
+            $groups = $trickForm->get('group')->getData();
+            foreach($groups as $group){
+                if(!$group->getId()){
+                    $g = new Group();
+                    $g->setName($group->getName());
+                } else {
+                    $g = $groupRepository->findOneById($group->getId());
+                }
+                $trick->addGroup($g);
+            }
         
             /***** ******/
 
@@ -126,6 +138,7 @@ class TrickController extends AbstractController
 
             $slug = $sluggerInterface->slug($trick->getName())->lower();
             $trick->setSlug($slug);
+            $trick->setCreatedAt(new DateTimeImmutable());
             $entityManagerInterface->persist($trick);
             $entityManagerInterface->flush();
 
@@ -184,21 +197,20 @@ class TrickController extends AbstractController
         if($trickForm->isSubmitted() && $trickForm->isValid()) {
 
             /** Ajout des groupes */
-            $groups =  $trickForm->get('group')->getData();
-            $groupsFromForm = [];
-            foreach($groups as $group) {
-                $g = $groupRepository->findOneById($group);
-                array_push($groupsFromForm, $g);
+
+            $trick->getGroup()->clear();
+            $groups = $trickForm->get('group')->getData();
+            foreach($groups as $group){
+                if(!$group->getId()){
+                    $g = new Group();
+                    $g->setName($group->getName());
+                } else {
+                    $g = $groupRepository->findOneById($group->getId());
+                }
+                $trick->addGroup($g);
             }
 
-            $listGroup = $groupRepository->findAll();
-            foreach($listGroup as $group) {
-                if(in_array($group, $groupsFromForm)) {
-                    $trick->addGroup($group);
-                } else {
-                    $trick->removeGroup($group);
-                }
-            }
+            
 
             $images = $trickForm->get('pictures')->getData();
 
@@ -219,6 +231,7 @@ class TrickController extends AbstractController
 
             $slug = $sluggerInterface->slug($trick->getName())->lower();
             $trick->setSlug($slug);
+            $trick->setUpdatedAt(new DateTimeImmutable());
 
             $entityManagerInterface->persist($trick);
             $entityManagerInterface->flush();
@@ -263,6 +276,7 @@ class TrickController extends AbstractController
         $comment = new Comment();
         $commentForm = $this->createForm(CommentFormType::class, $comment);
         $commentForm->handleRequest($request);
+
 
         
         if($this->getUser() && $commentForm->isSubmitted() && $commentForm->isValid()) {

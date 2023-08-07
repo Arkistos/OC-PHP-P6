@@ -4,29 +4,56 @@
 
 {% block body %}
 <div class="trick-content">
-    <ul class="list-pills">
-        {% for group in trick.group %}
-        <li class="pills">{{group.name}}</li>
-        {% endfor %}
-    </ul>
+    <div class="trick-hero">
+        {% set picture = trick.pictures|first %}
+        {% if picture %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="">
+        {% else %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+        {% endif %}
+        <h1> {{trick.name}}</h1>
+        <div class="trick-management">
+            <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
+            <a href="trick/remove/{{trick.slug}}"><img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
+        </div>
+    </div>
 
-    <h1> {{trick.name}}</h1>
-    <h2>{{trick.description}}</h2>
-
-    <ul class="trick-list">
+    <ul class="trick-media-list">
         {% for picture in trick.pictures %}
         <li>
             <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
             
         </li>
         {% endfor %}
-    </ul>
 
-    <ul class="trick-list">
+
         {% for video in trick.videos %}
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="355" height="200" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         {% endfor %}
     </ul>
+ 
+    
+    <h2>{{trick.description}}</h2>
+
+    
+
+    <ul class="trick-list-pills">
+        {% for group in trick.group %}
+        <li class="pills">{{group.name}}</li>
+        {% endfor %}
+    </ul>
+    <div class="trick-info">
+        <span>Figure créé le {{trick.createdAt|date('d-m-Y') }}
+            {% if trick.updatedAt %}
+                et modifé le {{trick.updatedAt|date('d-m-Y')}}
+            {% endif %}
+        </span>
+    </div>
+
+    
+   
+
+    
 
     <div id="comments">
         <h3>Commentaires</h3>

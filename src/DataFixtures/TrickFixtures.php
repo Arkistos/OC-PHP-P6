@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Group;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -78,6 +79,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick->setName($name);
         $trick->setSlug($this->sluggerInterface->slug($name)->lower());
         $trick->setDescription($description);
+        $trick->setCreatedAt(new DateTimeImmutable());
 
         foreach($groupReferences as $groupReference){
             $group = $this->getReference($groupReference);

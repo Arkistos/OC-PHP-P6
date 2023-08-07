@@ -3,8 +3,12 @@
 {% block title %}Ajout d'une figure{% endblock %}
 
 {% block body %}
-<div class="trick-form-content">
-    <h1>Ajout d'une figure</h1>
+<div class="trick-content">
+    <div class="trick-hero">
+        <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+        <h1>Création d'une figure</h1>
+    </div>
+   
     
     {% include "_forms/_add_form.html.twig" %}
 </div>
