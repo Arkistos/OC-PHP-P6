@@ -6,7 +6,6 @@ use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use LimitIterator;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -35,18 +34,16 @@ class CommentRepository extends ServiceEntityRepository
             ->join('c.trick', 't')
             ->where("t.slug = '$slug'")
             ->setMaxResults($limit)
-            ->setFirstResult(($page*$limit)-$limit);
+            ->setFirstResult(($page * $limit) - $limit);
 
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
 
-        if(empty($data)) {
+        if (empty($data)) {
             $pages = 1;
         } else {
-            $pages = ceil($paginator->count()/$limit);
+            $pages = ceil($paginator->count() / $limit);
         }
-
-
 
         $result['data'] = $data;
         $result['pages'] = $pages;
@@ -55,7 +52,6 @@ class CommentRepository extends ServiceEntityRepository
 
         return $result;
     }
-
 
     public function save(Comment $entity, bool $flush = false): void
     {

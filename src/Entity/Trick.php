@@ -24,15 +24,13 @@ class Trick
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-
-
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
     private Collection $videos;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true)]
     private Collection $pictures;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick', cascade:['persist'])]
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'trick', cascade: ['persist'])]
     private Collection $group;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
@@ -92,8 +90,6 @@ class Trick
 
         return $this;
     }
-
-
 
     /**
      * @return Collection<int, Video>
@@ -235,6 +231,4 @@ class Trick
 
         return $this;
     }
-
-
 }

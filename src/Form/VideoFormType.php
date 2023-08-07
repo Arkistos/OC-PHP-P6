@@ -12,8 +12,8 @@ class VideoFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('link', options:[
-                "label" => 'Lien'
+            ->add('link', options: [
+                'label' => 'Lien',
             ])
         ;
     }

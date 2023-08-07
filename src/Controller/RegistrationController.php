@@ -47,21 +47,19 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            //Enregistrement de la photo de profil
+            // Enregistrement de la photo de profil
             $pictureService->add($form->get('profile_pic')->getData(), $user->getUsername(), '/profile_pics', 300, 300);
-
 
             $header = [
                 'typ' => 'JWT',
-                'alg' => 'HS256'
+                'alg' => 'HS256',
             ];
 
             $payload = [
-                'user_id' => $user->getId()
+                'user_id' => $user->getId(),
             ];
 
             $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
-
 
             $mail->send(
                 'no-reply@snowtricks.fr',
@@ -83,49 +81,49 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-
     #[Route('/checkToken/{token}', name: 'check_user')]
     public function checkUser(string $token, JWTService $jwt, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
-        if($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
+        if ($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
             $payload = $jwt->getPayload($token);
 
             $user = $userRepository->find($payload['user_id']);
 
-            if($user && !$user->isIsActivated()) {
+            if ($user && !$user->isIsActivated()) {
                 $user->setIsActivated(true);
                 $em->flush($user);
+
                 return $this->redirectToRoute('app_homepage');
             }
+
             return $this->redirectToRoute('app_login');
         }
 
         /***** Message annonçant le token invalide *****/
     }
 
-    #[Route('/resendcheck', name:'resend_check')]
+    #[Route('/resendcheck', name: 'resend_check')]
     public function resendCheck(JWTService $jwt, SendMailService $mailer, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
-        if(!$user) {
+        if (!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        if($user->isIsActivated()) {
+        if ($user->isIsActivated()) {
             return $this->redirectToRoute('app_homepage');
         }
 
         $header = [
             'typ' => 'JWT',
-            'alg' => 'HS256'
+            'alg' => 'HS256',
         ];
 
         $payload = [
-            'user_id' => $user->getId()
+            'user_id' => $user->getId(),
         ];
 
         $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
-
 
         $mailer->send(
             'no-reply@snowtricks.fr',
@@ -134,6 +132,7 @@ class RegistrationController extends AbstractController
             'register',
             compact('user', 'token')
         );
+
         return $this->redirectToRoute('app_homepage');
     }
 }

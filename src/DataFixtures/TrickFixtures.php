@@ -2,10 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Group;
 use App\Entity\Picture;
 use App\Entity\Trick;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -19,7 +17,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        //$product = new Product();
+        // $product = new Product();
         // $manager->persist($product);
         $this->createTrick(
             'Mute',
@@ -80,14 +78,14 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $trick->setName($name);
         $trick->setSlug($this->sluggerInterface->slug($name)->lower());
         $trick->setDescription($description);
-        $trick->setCreatedAt(new DateTimeImmutable());
+        $trick->setCreatedAt(new \DateTimeImmutable());
 
-        foreach($groupReferences as $groupReference) {
+        foreach ($groupReferences as $groupReference) {
             $group = $this->getReference($groupReference);
             $trick->addGroup($group);
         }
 
-        foreach($picturesId as $pictureId) {
+        foreach ($picturesId as $pictureId) {
             $picture = new Picture();
             $picture->setTrick($trick);
 
@@ -101,8 +99,8 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return[
-            GroupFixtures::class
+        return [
+            GroupFixtures::class,
         ];
     }
 }

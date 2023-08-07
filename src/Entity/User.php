@@ -34,10 +34,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(options:['default'=>false])]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $is_activated = null;
 
-    #[ORM\Column(type:'string', nullable: true, length:100)]
+    #[ORM\Column(type: 'string', nullable: true, length: 100)]
     private ?string $resetToken;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -51,7 +51,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->is_activated = false;
         $this->comments = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -200,5 +199,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

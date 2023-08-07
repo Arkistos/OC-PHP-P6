@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Comment;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -43,22 +42,16 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         );
 
         $manager->flush();
-
-
-
-
     }
 
     private function createComment(string $trickSlug, ObjectManager $manager): void
     {
-
-
         $faker = Faker\Factory::create('fr_FR');
 
-        for($fakeComment = 1; $fakeComment<=15; $fakeComment++) {
+        for ($fakeComment = 1; $fakeComment <= 15; ++$fakeComment) {
             $comment = new Comment();
             $comment->setContent($faker->sentence());
-            $comment->setCreatedAt(new DateTimeImmutable());
+            $comment->setCreatedAt(new \DateTimeImmutable());
             $comment->setTrick($this->getReference($trickSlug));
             $comment->setUser($this->getReference($faker->numberBetween(1, 5)));
             $manager->persist($comment);
@@ -68,7 +61,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            TrickFixtures::class
+            TrickFixtures::class,
         ];
     }
 }

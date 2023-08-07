@@ -17,8 +17,8 @@ class CommentFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                    'placeholder' => 'Entrez votre message',
-                    'class' => 'input-comment input'
-                ]
+                    'class' => 'input-comment input',
+                ],
             ])
         ;
     }

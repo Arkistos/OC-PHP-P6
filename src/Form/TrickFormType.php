@@ -4,16 +4,11 @@ namespace App\Form;
 
 use App\Entity\Group;
 use App\Entity\Trick;
-use App\Entity\Video;
-use App\Form\VideoFormType;
-use Doctrine\DBAL\Types\StringType;
-use Monolog\Handler\GroupHandler;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,8 +17,8 @@ class TrickFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', options:[
-                'label'=>'Nom',
+            ->add('name', options: [
+                'label' => 'Nom',
             ])
             ->add('description', TextareaType::class)
             /*->add('group', CollectionType::class, [
@@ -41,16 +36,15 @@ class TrickFormType extends AbstractType
             ->add('group', CollectionType::class, [
                 'entry_type' => GroupFormType::class,
                 'label' => 'Catégorie',
-                'entry_options' => ['label'=>false],
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'required' => false
-
+                'required' => false,
             ])
             ->add('pictures', FileType::class, [
                 'label' => 'Images',
-                'multiple' =>true,
+                'multiple' => true,
                 'mapped' => false,
                 'required' => false,
             ])
@@ -62,10 +56,10 @@ class TrickFormType extends AbstractType
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoFormType::class,
                 'label' => 'Videos',
-                'entry_options' => ['label'=>false],
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false
+                'by_reference' => false,
             ])
         ;
     }

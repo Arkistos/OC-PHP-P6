@@ -50,18 +50,16 @@ class TrickRepository extends ServiceEntityRepository
             ->select('t')
             ->from('App\Entity\Trick', 't')
             ->setMaxResults($limit)
-            ->setFirstResult(($page*$limit)-$limit);
+            ->setFirstResult(($page * $limit) - $limit);
 
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
 
-        if(empty($data)) {
+        if (empty($data)) {
             $pages = 1;
         } else {
-            $pages = ceil($paginator->count()/$limit);
+            $pages = ceil($paginator->count() / $limit);
         }
-
-
 
         $result['data'] = $data;
         $result['pages'] = $pages;

@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Trick;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -61,8 +60,8 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return[
-            TrickFixtures::class
+        return [
+            TrickFixtures::class,
         ];
     }
 }

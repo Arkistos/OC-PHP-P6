@@ -2,15 +2,12 @@
 
 namespace App\Service;
 
-use DateTime;
-use DateTimeImmutable;
-
 class JWTService
 {
     public function generate(array $header, array $payload, string $secret, int $validity = 10800): string
     {
-        if($validity >0) {
-            $now = new DateTimeImmutable();
+        if ($validity > 0) {
+            $now = new \DateTimeImmutable();
             $exp = $now->getTimestamp() + $validity;
 
             $payload['iat'] = $now->getTimestamp();
@@ -20,16 +17,16 @@ class JWTService
         $base64Header = base64_encode(json_encode($header));
         $base64Payload = base64_encode(json_encode($payload));
 
-        //On retire les +, / et = qui ne sont pas pris en compte par les JWT
-        $base64Header = str_replace(['+', '/', '='], ['-','_',''], $base64Header);
-        $base64Payload = str_replace(['+', '/', '='], ['-','_',''], $base64Payload);
+        // On retire les +, / et = qui ne sont pas pris en compte par les JWT
+        $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], $base64Header);
+        $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], $base64Payload);
 
         $secret = base64_encode($secret);
 
         $signature = hash_hmac('sha256', $base64Header.'.'.$base64Payload, $secret, true);
 
         $base64Signature = base64_encode($signature);
-        $base64Signature = str_replace(['+', '/', '='], ['-','_',''], $base64Signature);
+        $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], $base64Signature);
 
         $jwt = $base64Header.'.'.$base64Payload.'.'.$base64Signature;
 
@@ -38,7 +35,7 @@ class JWTService
 
     public function isValid(string $token): bool
     {
-        return preg_match('/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/', $token)===1;
+        return 1 === preg_match('/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/', $token);
     }
 
     public function getHeader(string $token): array
@@ -62,9 +59,9 @@ class JWTService
     public function isExpired(string $token): bool
     {
         $payload = $this->getPayload($token);
-        $now = new DateTimeImmutable();
+        $now = new \DateTimeImmutable();
 
-        return $payload['exp']<$now->getTimestamp();
+        return $payload['exp'] < $now->getTimestamp();
     }
 
     public function check(string $token, string $secret): bool
