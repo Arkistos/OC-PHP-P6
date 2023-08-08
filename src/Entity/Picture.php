@@ -22,6 +22,13 @@ class Picture
         return $this->id;
     }
 
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getTrick(): ?Trick
     {
         return $this->trick;

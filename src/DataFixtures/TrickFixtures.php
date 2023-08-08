@@ -23,56 +23,63 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             'Mute',
             'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
             ['Grabs'],
-            [21, 22],
+            [33, 34],
+            263,
             $manager
         );
         $this->createTrick(
             'Indy',
             'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.',
             ['Grabs'],
-            [23, 24, 25],
+            [35, 36, 37],
+            264,
             $manager
         );
         $this->createTrick(
             '360°',
             'Tour complet.',
             ['Rotations'],
-            [26],
+            [38],
+            265,
             $manager
         );
         $this->createTrick(
             '180° BackFlip',
             'Demi tour avec salto arrière.',
             ['Rotations', 'Flips'],
-            [27],
+            [39],
+            266,
             $manager
         );
         $this->createTrick(
             'Nose Slide',
             "Glisse sur une barre avec la plance penché vers l'avant",
             ['Slides'],
-            [28, 29],
+            [40, 41],
+            267,
             $manager
         );
         $this->createTrick(
             'Tail Slide',
             "Glisse sur une barre avec la plance penché vers l'arrière",
             ['Slides'],
-            [30],
+            [42],
+            268,
             $manager
         );
         $this->createTrick(
             'Front Flip',
             'Salto avant',
             ['Flips'],
-            [31, 32],
+            [43, 44],
+            269,
             $manager
         );
-
+        
         $manager->flush();
     }
 
-    private function createTrick(string $name, string $description, array $groupReferences, array $picturesId, ObjectManager $manager): void
+    private function createTrick(string $name, string $description, array $groupReferences, array $picturesId, int $id, ObjectManager $manager): void
     {
         $trick = new Trick();
         $trick->setName($name);
@@ -85,16 +92,19 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $trick->addGroup($group);
         }
 
-        foreach ($picturesId as $pictureId) {
+        foreach ($picturesId as $index => $pictureId) {
             $picture = new Picture();
             $picture->setTrick($trick);
 
             $manager->persist($picture);
+            
         }
 
         $manager->persist($trick);
 
+        
         $this->addReference($trick->getSlug(), $trick);
+        
     }
 
     public function getDependencies()
