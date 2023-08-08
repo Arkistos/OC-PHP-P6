@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
-#[UniqueEntity(fields:['name'], message:'Cette catégorie existe déjà')]
+#[UniqueEntity(fields: ['name'], message: 'Cette catégorie existe déjà')]
 class Group
 {
     #[ORM\Id]

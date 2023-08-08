@@ -75,7 +75,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             269,
             $manager
         );
-        
+
         $manager->flush();
     }
 
@@ -97,14 +97,11 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $picture->setTrick($trick);
 
             $manager->persist($picture);
-            
         }
 
         $manager->persist($trick);
 
-        
         $this->addReference($trick->getSlug(), $trick);
-        
     }
 
     public function getDependencies()

@@ -7,11 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Mime\Message;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-#[UniqueEntity(fields:['name'], message: 'Cette figure existe déjà')]
+#[UniqueEntity(fields: ['name'], message: 'Cette figure existe déjà')]
 class Trick
 {
     #[ORM\Id]
@@ -65,7 +64,7 @@ class Trick
         return $this->id;
     }
 
-    public function setId(int $id):static
+    public function setId(int $id): static
     {
         $this->id = $id;
 

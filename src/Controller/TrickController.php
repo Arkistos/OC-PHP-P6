@@ -101,6 +101,8 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+            $this->addFlash('notice', 'La figure '.$trick->getName().' à été ajouté.');
+
             /* Ajout des groupes */
             $trick->getGroup()->clear();
             $groups = $trickForm->get('group')->getData();
@@ -180,6 +182,8 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+
+            $this->addFlash('notice', 'La figure '.$trick->getName().' a été modifé');
             /* Ajout des groupes */
 
             $trick->getGroup()->clear();
@@ -238,6 +242,7 @@ class TrickController extends AbstractController
 
         $entityManagerInterface->remove($trick);
         $entityManagerInterface->flush();
+        $this->addFlash('notice', 'La figure '.$trick->getName(). ' a été suprimé');
 
         return $this->redirectToRoute('app_homepage');
     }
@@ -280,6 +285,7 @@ class TrickController extends AbstractController
         if ($pictureService->delete(''.$picture->getTrick()->getId().'-'.$picture->getId().'.webp', '/tricks_pictures', 300, 300)) {
             $entityManagerInterface->remove($picture);
             $entityManagerInterface->flush();
+            $this->addFlash('notice', 'L\'image a été supprimé');
         }
 
         return $this->redirectToRoute('app_edit_trick', ['slug' => $picture->getTrick()->getSlug()]);
@@ -291,6 +297,7 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $entityManagerInterface->remove($video);
         $entityManagerInterface->flush();
+        $this->addFlash('notice', 'La vidéo a été supprimé');
 
         return $this->redirectToRoute('app_edit_trick', ['slug' => $video->getTrick()->getSlug()]);
     }

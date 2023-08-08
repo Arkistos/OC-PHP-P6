@@ -23,6 +23,13 @@
     </head>
     <body>
         {% include "_partials/_header.html.twig" %}
+        <div class="flash">
+            {% for message in app.flashes('notice') %}
+                <div class="flash-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
         {% if app.user and app.user.isActivated == false  %}
             <div class="alert-box">
             <p>Votre compte n'est pas activé</p>

@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class PictureFixtures extends Fixture implements DependentFixtureInterface
 {
     private $params;
+
     public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
@@ -28,14 +29,16 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function movePictures(string $trickSlug){
+    public function movePictures(string $trickSlug)
+    {
         $trick = $this->getReference($trickSlug);
-        foreach($trick->getPictures() as $index=>$picture){
+        foreach ($trick->getPictures() as $index => $picture) {
             $oldPath = $path = $this->params->get('ressources_directory').$trick->getSlug().$index.'.webp';
             $newPath = $path = $this->params->get('images_directory').'tricks_pictures/'.$trick->getId().'-'.$picture->getId().'.webp';
-            copy($oldPath,$newPath);
+            copy($oldPath, $newPath);
         }
     }
+
     public function getDependencies()
     {
         return [

@@ -42,7 +42,7 @@ li{
     font-family: var(--secondary-font);
     color: var(--main-color);
     right: 10px;
-    top: 60px;
+    top: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,6 +56,24 @@ li{
 .alert-box a:hover{
     text-decoration: underline;
 }
+
+.flash{
+    position: absolute;
+    left: 0px;
+    top: 60px;
+}
+
+.flash-notice{
+    background-color: var(--main-bg-color);
+    border: #13324e 0.5px solid;
+    padding: 10px 20px 20px 20px;
+    border-radius: 10px;
+    font-family: var(--secondary-font);
+    color: var(--main-color);
+    text-align: center;
+    width: 100vw;
+}
+
 
 .input{
     border: var(--main-color) 1px solid;
