@@ -43,7 +43,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/json-tricks/{page}', name: 'app_json_tricks')]
+    #[Route('/json-tricks/{page}', name: 'app_json_tricks', requirements: ['page' => '\d+'])]
     public function jsonTricks(
         int $page,
         TrickRepository $trickRepository
@@ -161,7 +161,7 @@ class TrickController extends AbstractController
         // return $this->renderForm('trick/add.html.twig', compact("trickForm"));
     }
 
-    #[Route('/trick/edit/{slug}', name: 'app_edit_trick')]
+    #[Route('/trick/edit/{slug}', name: 'app_edit_trick', requirements: ['slug' => '[a-z0-9-]+'])]
     public function editTrick(
         Trick $trick,
         Request $request,
@@ -229,7 +229,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/trick/remove/{slug}', name: 'app_remove_trick')]
+    #[Route('/trick/remove/{slug}', name: 'app_remove_trick', requirements: ['slug' => '[a-z0-9-]+'])]
     public function removeTrick(Trick $trick, EntityManagerInterface $entityManagerInterface, VideoRepository $videoRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
@@ -247,7 +247,7 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_homepage');
     }
 
-    #[Route('/trick/{slug}', name: 'app_trick')]
+    #[Route('/trick/{slug}', name: 'app_trick', requirements: ['slug' => '[a-z0-9-]+'])]
     public function trick(Trick $trick, CommentRepository $commentRepository, Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
         $page = $request->query->getInt('page', 1);
@@ -274,7 +274,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/picture/remove/{id}', name: 'app_picture_remove')]
+    #[Route('/picture/remove/{id}', name: 'app_picture_remove', requirements: ['id' => '\d+'])]
     public function removePicture(
         Picture $picture,
         PictureService $pictureService,
@@ -291,7 +291,7 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_edit_trick', ['slug' => $picture->getTrick()->getSlug()]);
     }
 
-    #[Route('/video/remove/{id}', name: 'app_video_remove')]
+    #[Route('/video/remove/{id}', name: 'app_video_remove',  requirements: ['id' => '\d+'])]
     public function removeVideo(Video $video, EntityManagerInterface $entityManagerInterface): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
