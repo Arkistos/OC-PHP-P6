@@ -108,11 +108,11 @@
                     },
                 })
                 .then(function(response){
+                    
                     return response.json();
                 })
                 .then((response)=>{
-                    tricks = JSON.parse(response);
-
+                    tricks = response;
                     for (const key in tricks){
                         let newCard = document.createElement('div');
                         if(tricks.hasOwnProperty(key)){
@@ -120,21 +120,21 @@
                             newListPills = document.createElement('div');
                             newListPills.className = 'list-pills';
                             newCard.append(newListPills);
-                            for(const groupKey in tricks[key]['groups']){
-                                if(tricks[groupKey]['groups'].hasOwnProperty(groupKey)){
-                                    newListPills.innerHTML +='<li class="pills">'+ tricks[key]['groups'][groupKey] +'</li>'
+                            for(const groupKey in tricks[key]['group']){
+                                if(tricks[groupKey]['group'].hasOwnProperty(groupKey)){
+                                    newListPills.innerHTML +='<li class="pills">'+ tricks[key]['group'][groupKey].name +'</li>'
                                 }
                             }
                             newImg = document.createElement('div');
                             newImgtag = document.createElement('img');
                             newImgtag.className = 'card-picture';
                             let id = tricks[key]['id'];
-                            let pics = tricks[key]['pic'];
+                            let pics = tricks[key]['pictures'];
                             
-                            if(pics === undefined){
+                            if(pics.length == 0){
                                 newImgtag.src = "{{asset('assets/uploads/tricks_pictures/default-picture.png')}}";
                             } else {
-                                newImgtag.src = "assets/uploads/tricks_pictures/"+ id +"-"+ pics +".webp"
+                                newImgtag.src = "assets/uploads/tricks_pictures/"+ id +"-"+ pics[0].id +".webp"
                             } 
                             newImg.append(newImgtag);
                             newCard.append(newImg);

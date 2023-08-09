@@ -25,6 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory as FactoryClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -48,36 +49,20 @@ class TrickController extends AbstractController
         int $page,
         TrickRepository $trickRepository
     ): Response {
-        /*
-         $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-         $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
-         $tricks = $trickRepository->findAll();
-         $jsonGroups = $serializer->serialize($tricks, 'json');*/
+        $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+
+        $defaultContext = [
+            AbstractObjectNormalizer::MAX_DEPTH_HANDLER => function ($object) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer($classMetadataFactory, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer]);
+
         $tricks = $trickRepository->findTricksPaginated($page)['data'];
-        $jsonTricks = [];
+        $jsonTricks = $serializer->normalize($tricks, 'json', [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]);
 
-        foreach ($tricks as $trick) {
-            $tabTrick = [
-                'id' => $trick->getId(),
-                'name' => $trick->getName(),
-                'slug' => $trick->getSlug(),
-            ];
-            $tabGroup = [];
-            foreach ($trick->getGroup() as $group) {
-                array_push($tabGroup, $group->getName());
-            }
-            $tabTrick['groups'] = $tabGroup;
-
-            if (count($trick->getPictures()) > 0) {
-                $tabTrick['pic'] = $trick->getPictures()[0]->getId();
-            }
-
-            array_push($jsonTricks, $tabTrick);
-        }
-
-        $str_json = json_encode($jsonTricks, JSON_FORCE_OBJECT);
-
-        return new jsonResponse($str_json);
+        return new jsonResponse($jsonTricks);
     }
 
     #[Route('/trick/add', name: 'app_trick_add')]
@@ -182,7 +167,6 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-
             $this->addFlash('notice', 'La figure '.$trick->getName().' a été modifé');
             /* Ajout des groupes */
 
@@ -242,7 +226,7 @@ class TrickController extends AbstractController
 
         $entityManagerInterface->remove($trick);
         $entityManagerInterface->flush();
-        $this->addFlash('notice', 'La figure '.$trick->getName(). ' a été suprimé');
+        $this->addFlash('notice', 'La figure '.$trick->getName().' a été suprimé');
 
         return $this->redirectToRoute('app_homepage');
     }
@@ -291,7 +275,7 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_edit_trick', ['slug' => $picture->getTrick()->getSlug()]);
     }
 
-    #[Route('/video/remove/{id}', name: 'app_video_remove',  requirements: ['id' => '\d+'])]
+    #[Route('/video/remove/{id}', name: 'app_video_remove', requirements: ['id' => '\d+'])]
     public function removeVideo(Video $video, EntityManagerInterface $entityManagerInterface): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
