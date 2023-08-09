@@ -22,3 +22,26 @@
     width: 100px;
 }
 
+.form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+@media screen and (max-width: 500px ){
+    form{
+    }
+    .informations-form{
+        width: 90vw;
+        border-radius: 20px;
+        border: var(--main-color) 0.5px solid;
+        padding: 50px 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: var(--main-font);
+        color: var(--main-color);
+    }
+}
+

@@ -34,8 +34,7 @@ li{
 }
 
 .alert-box{
-    position:absolute;
-    background-color: var(--main-bg-color);
+    position:fixed;
     border: #13324e 0.5px solid;
     padding: 10px 20px 20px 20px;
     border-radius: 10px;
@@ -46,6 +45,14 @@ li{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    z-index: 1000;
+
+    background: rgba( 255, 255, 255, 0.35 );
+    box-shadow: 0 8px 32px 0 var(--main-color);
+    backdrop-filter: blur( 9.5px );
+    -webkit-backdrop-filter: blur( 9.5px );
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
 }
 
 .alert-box a {
@@ -64,14 +71,19 @@ li{
 }
 
 .flash-notice{
-    background-color: var(--main-bg-color);
-    border: #13324e 0.5px solid;
     padding: 10px 20px 20px 20px;
     border-radius: 10px;
     font-family: var(--secondary-font);
     color: var(--main-color);
     text-align: center;
     width: 100vw;
+
+    background: rgba( 255, 255, 255, 0.35 );
+    box-shadow: 0 8px 32px 0 var(--main-color);
+    backdrop-filter: blur( 9.5px );
+    -webkit-backdrop-filter: blur( 9.5px );
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
 }
 
 
@@ -96,7 +108,12 @@ footer{
 }
 
 @media screen and (max-width: 500px ){
-
+    .alert-box{
+        top: 0px;
+    }
+    h1{
+        font-size: 50px;
+    }
     footer{
         margin-bottom: 100px;
     }

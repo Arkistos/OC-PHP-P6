@@ -18,19 +18,19 @@
         </div>
     </div>
 
-    <ul class="trick-media-list">
+    <div class="trick-media-list">
         {% for picture in trick.pictures %}
-        <li>
+        
             <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
             
-        </li>
+        
         {% endfor %}
 
 
         {% for video in trick.videos %}
-        <iframe width="355" height="200" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="200" height="200" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         {% endfor %}
-    </ul>
+    </div>
  
     
     <h2>{{trick.description}}</h2>

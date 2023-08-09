@@ -16,9 +16,9 @@
 
     <div class="informations-form">
         <h1 class="">Connexion</h1>
-        <label for="inputUsername">Username</label>
+        <label for="inputUsername">Nom d'utilisateur</label>
         <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="input form-control" autocomplete="username" required autofocus>
-        <label for="inputPassword">Password</label>
+        <label for="inputPassword">Mot de passe</label>
         <input type="password" name="password" id="inputPassword" class="form-control input" autocomplete="current-password" required>
         <a href={{path('app_forgotten_password')}}>Mot de passe oublié</a>
         <input type="hidden" name="_csrf_token"
@@ -37,7 +37,7 @@
     #}
 
     <button class="login-button pills" type="submit">
-        Sign in
+        Se connecter
     </button>
 </form>
 
