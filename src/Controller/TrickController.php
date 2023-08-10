@@ -17,6 +17,7 @@ use App\Service\PictureService;
 use App\Service\VideoService;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,6 @@ class TrickController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function index(TrickRepository $trickRepository): Response
     {
-        // $tricks = $trickRepository->findAll();
         $tricksPaginated = $trickRepository->findTricksPaginated(1);
 
         return $this->render('trick/homepage.html.twig', [
@@ -52,7 +52,7 @@ class TrickController extends AbstractController
         $classMetadataFactory = new FactoryClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
 
         $defaultContext = [
-            AbstractObjectNormalizer::MAX_DEPTH_HANDLER => function ($object) {
+            AbstractObjectNormalizer::MAX_DEPTH_HANDLER => function (Trick $object) {
                 return $object->getId();
             },
         ];
@@ -142,8 +142,6 @@ class TrickController extends AbstractController
             'jsonGroups' => $jsonGroups,
         ]
         );
-
-        // return $this->renderForm('trick/add.html.twig', compact("trickForm"));
     }
 
     #[Route('/trick/edit/{slug}', name: 'app_edit_trick', requirements: ['slug' => '[a-z0-9-]+'])]

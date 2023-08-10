@@ -14,7 +14,7 @@ class PictureService
         $this->params = $params;
     }
 
-    public function add(UploadedFile $picture, string $name, ?string $folder = '', ?int $width = 250, ?int $height = 250)
+    public function add(UploadedFile $picture, string $name, ?string $folder = '', ?int $width = 500, ?int $height = 500):string
     {
         $fichier = $name.'.webp';
 
@@ -64,12 +64,11 @@ class PictureService
         $path = $this->params->get('images_directory').$folder;
 
         imagewebp($resizedPicture, $path.'/'.$fichier);
-        // $picture->move($path .'/', $fichier);
 
         return $fichier;
     }
 
-    public function delete(string $fichier, ?string $folder = '', ?int $width = 250, ?int $height = 250)
+    public function delete(string $fichier, ?string $folder = '', ?int $width = 250, ?int $height = 250):bool
     {
         if ('default.webp' !== $fichier) {
             $success = false;
