@@ -42,14 +42,19 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            $user->setProfilePic($user->getUsername());
+            $picture = $form->get('profile_pic')->getData();
+            if ($picture) {
+                $user->setProfilePic($user->getUsername());
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
-
+            $this->addFlash('notice', 'Votre compte a été créé');
             // Enregistrement de la photo de profil
-            $pictureService->add($form->get('profile_pic')->getData(), $user->getUsername(), '/profile_pics', 300, 300);
-
+            if ($user->getProfilePic()) {
+                $pictureService->add($picture, $user->getUsername(), '/profile_pics', 300, 300);
+            }
             $header = [
                 'typ' => 'JWT',
                 'alg' => 'HS256',

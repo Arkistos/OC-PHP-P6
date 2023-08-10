@@ -12,18 +12,22 @@
         <div class="form-group">
         {{ form_label(registrationForm.username) }}
         {{ form_widget(registrationForm.username) }}
+        {{ form_errors(registrationForm.username)}}
         </div>
         <div class="form-group">
         {{ form_label(registrationForm.email) }}
         {{ form_widget(registrationForm.email) }}
+        {{ form_errors(registrationForm.email)}}
         </div>
         <div class="form-group">
         {{ form_label(registrationForm.plainPassword)}}
         {{ form_widget(registrationForm.plainPassword) }}
+        {{ form_errors(registrationForm.plainPassword)}}
         </div>
         <div class="form-group">
         {{ form_label(registrationForm.profile_pic) }}
         {{ form_widget(registrationForm.profile_pic) }}
+        {{ form_errors(registrationForm.profile_pic)}}
         </div>
         <div class="form-group">
             <button type="submit" class="pills login-button">Register</button>

@@ -12,10 +12,13 @@
             <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
         {% endif %}
         <h1> {{trick.name}}</h1>
-        <div class="trick-management">
+        {% if app.user %}
+            <div class="trick-management">
             <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
             <a href="trick/remove/{{trick.slug}}"><img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
         </div>
+        {% endif %}
+        
     </div>
 
     <div class="trick-media-list">

@@ -39,6 +39,12 @@ symfony console doctrine:database:create
 symfony console doctrine:migrations:migrate
 ```
 
+4. Executez les fixtures:
+
+```bash
+symfony console doctrine:fixtures:load
+```
+
 5. Lancez le serveur de développement :
 ```bash
 symfony console server:start
