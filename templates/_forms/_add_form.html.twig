@@ -1,40 +1,39 @@
-
 <div class="trick-form">
-{{ form_start(trickForm)}}
+    {{ form_start(trickForm)}}
     <div class="trick-form-field">
         {{ form_label(trickForm.name)}}
         {{ form_widget(trickForm.name)}}
     </div>
-    
+
     <div class="trick-form-field">
         {{ form_label(trickForm.description)}}
         {{ form_widget(trickForm.description)}}
     </div>
-    
-    
+
+
     <div id="groups" data-prototype="{{ form_row(trickForm.group.vars.prototype)|e('html_attr')  }}">
         <div class="trick-form-field">
             {{ form_label(trickForm.group)}}
-                {{ form_widget(trickForm.group)}}
-                <div>
-                    <input type="text" class="group-autocomplete-input">
-                    <div class="group-autocomplete-list"></div>
-                </div>
+            {{ form_widget(trickForm.group)}}
+            <div>
+                <input type="text" class="group-autocomplete-input">
+                <div class="group-autocomplete-list"></div>
+            </div>
             <button type="button" class="group-add-button">Ajouter</button>
         </div>
         <span class="list-groups"></span>
     </div>
 
-  
 
-    
+
+
     <div class="trick-form-field">
         {{ form_label(trickForm.pictures)}}
         {{ form_widget(trickForm.pictures)}}
     </div>
-    
 
-        
+
+
     <div class="trick-form-field" id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
         {{ form_label(trickForm.videos)}}
         {{ form_widget(trickForm.videos)}}
@@ -46,287 +45,24 @@
         <span class="list-video"></span>
     </div>
 
-    
+
     <button class="submit-button" type="submit">Valider</button>
-{{ form_end(trickForm)}}
+    {{ form_end(trickForm)}}
 
 </div>
 
 {% block javascript %}
+<script src="{{asset('js/trick_groups.js')}}"></script>
+<script src="{{asset('js/trick_video.js')}}"></script>
 <script>
 
-    let groupsData = {{ jsonGroups|raw }};
+    let groupsData = {{ jsonGroups| raw }};
 
-    let collection, button, span;
-    let groupCollection, groupSpan, addGroupButton;
-    let groupAutocompleteInput, groupAutocompleteList, groupAddButton;
-    let linkInput ,linkButton, linkErrorMessage
     window.onload = () => {
-        linkInput = document.querySelector('.link-input');
-        linkButton = document.querySelector('.link-button');
-        linkErrorMessage = document.querySelector('.link-error-message');
-        document.querySelector('#videos').dataset.index = 0;
-
-
-        linkButton.addEventListener('click', function(){
-            onClickAddLink();
-        })
-        /*collection = document.querySelector('#videos');
-        span = collection.querySelector("span");
-        button = document.createElement("button");
-        button.className = "add-button";
-        button.innerText = 'Ajouter un lien';
-
-        let newButton = span.append(button);
-
-        collection.dataset.index = collection.querySelectorAll("input").length;
-
-        button.addEventListener("click", function(){
-            addButton(collection, newButton);
-        })*/
-
-        //Gestion des groups
-        groupAutocompleteInput = document.querySelector('.group-autocomplete-input');
-        groupAutocompleteList = document.querySelector('.group-autocomplete-list');
-        groupAddButton = document.querySelector('.group-add-button');
-        document.querySelector('#groups').dataset.index = 0;
-
-        groupAutocompleteInput.addEventListener('input', autocompleteInputChange);
-
-        groupAddButton.addEventListener("click", onClickAddGroup);
-        
-        
-        /*** Gestion des catégories pour l'édition ****/
-        const existingGroups = document.querySelectorAll('div[id^="trick_form_group_"]');
-        
-        existingGroups.forEach(element => {
-            const id = element.querySelector('input.group-id').value
-            const name = element.querySelector('input.group-name').value
-            console.log(id, name);
-            const prototype = getGroupPrototype();
-                addGroupPills(prototype,{id, name});
-            })
-            document.querySelector('#trick_form_group').remove();
-    }
-
-    function onClickAddLink() {
-        if(linkInput.value === ''){
-            return;
-        }
-
-        linkErrorMessage.textContent = '';
-        const link = findYoutubeCode(linkInput.value);
-        const prototype = getLinkPrototype();
-
-        addVideo(prototype, link);
-    }
-
-    function addVideo(prototype, link){
-        const video = createVideo(prototype, link);
-
-        document
-            .querySelector('.list-video')
-            .append(video);
-
-        linkInput.value = '';
-    }
-
-    function findYoutubeCode(link){
-
-        test = /https:\/\/youtu.be\/(?<link>[\w\-]{11})/.exec(link);
-        
-        if(test === null){
-            test = /https:\/\/www.youtube.com\/watch\?v=(?<link>[\w\-]{11})/.exec(link);
-        }
-
-        if(test === null){
-            linkErrorMessage.textContent = 'Le lien n\est pas valide';
-        }
-        return test.groups.link;
-    }
-
-    function createVideo(prototype, link){
-        html = document.createElement('html');
-        html.innerHTML = `
-            <div>
-                ${prototype}
-                <span>
-                    <iframe width="560" height="315" 
-                    src="https://www.youtube.com/embed/${link}" 
-                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
-                    clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-                    </iframe>
-                </span>
-                <span class='delete-video-button' >Supprimer</span>
-            </div>
-        `;
-        const video = html.querySelector('div');
-        video.querySelector('input.video-form').value = link;
-        video.querySelector('.delete-video-button').addEventListener('click', function(e){
-            e.target.parentElement.remove();
-        })
-        return video;
-    }
-
-    function getLinkPrototype(){
-        const linkArea = document.querySelector('#videos');
-        const {prototype, index} = linkArea.dataset;
-        const linkPrototype = prototype.replace(/__name__/g, index);
-        linkArea.dataset.index++;
-        return linkPrototype;
-    }
-/*
-    function addButton(collection, newButton){
-        let prototype = collection.dataset.prototype;
-
-        let index = collection.dataset.index;
-
-        prototype = prototype.replace(/__name__/g, index);
-
-        let content = document.createElement("html");
-        content.innerHTML = prototype;
-        let newForm = content.querySelector("div");
-
-        let deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.className = 'delete-button';
-        deleteButton.id = 'delete-video-'.index;
-        deleteButton.innerText = 'Supprimer ce lien';
-
-        newForm.append(deleteButton);
-
-        collection.dataset.index++;
-
-        let buttonAdd = collection.querySelector(".add-button");
-
-        span.insertBefore(newForm, buttonAdd);
-
-        deleteButton.addEventListener("click", function(){
-            this.previousElementSibling.parentElement.remove();
-        })
-    }*/
-
-    function onClickAddGroup(){
-        if(groupAutocompleteInput.value == ''){
-            return '';
-        }
-
-        const prototype = getGroupPrototype();
-        const group = getGroupValue();
-
-        addGroupPills(prototype, group);
-    }
-
-    function addGroupPills(prototype, group){
-        const groupPill = createGroupPill(prototype, group);
-        
-        document
-            .querySelector('span.list-groups')
-            .append(groupPill);
-
-        groupAutocompleteInput.value = '';
-        groupAutocompleteList.innerHTML = '';
-    }
-
-    function getGroupPrototype(){
-        const groupsArea = document.querySelector('#groups');
-        const {prototype, index} = groupsArea.dataset;
-        const groupPrototype = prototype.replace(/__name__/g, index);
-        groupsArea.dataset.index++;
-        return groupPrototype;
-    }
-
-    function getGroupValue(){
-        const inputValue = groupAutocompleteInput.value;
-        let group = groupsData.find((item)=> inputValue === item.name);
-        if(!group){
-            return {id:'', name:inputValue}
-        }
-        return group
-    }
-
-    function createGroupPill(prototype, group){
-        const html = `
-            <div>
-                ${prototype}
-                <span>${group.name}</span>
-                <span class='delete-group-button'>X</span>
-            </div>
-        `;
-
-        groupPill = document.createElement('html');
-        groupPill.innerHTML = html;
-        groupPill = groupPill.querySelector('div');
-        groupPill.querySelector('input.group-id').value = group.id;
-        groupPill.querySelector('input.group-name').value = group.name;
-        groupPill.querySelector('.delete-group-button').addEventListener('click', function(e){
-            e.target.parentElement.remove();
-        });
-        return groupPill;
-    }
-
-    function autocompleteInputChange(){
-        if(groupAutocompleteInput.value === ''){
-            groupAutocompleteList.innerHTML='';
-            return;
-        }
-
-        const regex = new RegExp(`${groupAutocompleteInput.value}`, 'i');
-            groupAutocompleteList.innerHTML = groupsData
-                .filter(item => regex.test(item.name))
-                .map(item => `<div class="group-autocomplete-option" data-id="${item.id}" data-name="${item.name}">
-                    ${item.name.replace(regex, (char) => `<strong>${char}</strong>`)}
-                </div>`)
-                .join('');
-
-        groupAutocompleteList
-            .querySelectorAll('.group-autocomplete-option')
-            .forEach((option)=>option.addEventListener('click', function(e){
-                const prototype = getGroupPrototype();
-                const {id, name} = e.target.dataset;
-                addGroupPills(prototype, {id, name});
-            }))
-
+        trickVideosInit();
+        trickGroupsInit();
     }
 
 
-
-
-    function inputGroup(input){
-        closeList();
-        list = document.querySelector('.group-autocomplete-list');
-        input.parentNode.appendChild(list);
-        for(indexGroupsData=0; indexGroupsData<groupsData.length; indexGroupsData++){
-            console.log(groupsData[indexGroupsData]);
-            if (groupsData[indexGroupsData].name.substr(0, input.value.length).toUpperCase() == input.value.toUpperCase()) {
-                listElement = document.createElement('div');
-                listElement.innerHTML = "<strong>" + groupsData[indexGroupsData].name.substr(0, input.value.length) + "</strong>";
-                listElement.innerHTML += groupsData[indexGroupsData].name.substr(input.value.length);
-          
-                listElement.innerHTML += "<input type='hidden' value='" + groupsData[indexGroupsData].name + "'>";
-                listElement.addEventListener("click", function(e) {
-                        input.value = this.getElementsByTagName("input")[0].value;
-                });
-                list.appendChild(listElement);
-            }
-        }
-        console.log(3, list);
-        if(input.value == ''){
-            closeList();
-        }
-    }
-
-    function closeList(){
-        autocompleteList = document.querySelector('.autocomplete-list');
-        console.log(autocompleteList)
-        if(autocompleteList!= null){
-            autocompleteList.remove();
-        }
-        
-    }
 </script>
 {% endblock %}
-
-
-
-
