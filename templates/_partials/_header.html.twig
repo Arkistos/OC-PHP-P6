@@ -1,0 +1,17 @@
+<div class="header">
+    <img class="logo" src="{{asset('assets/images/logo.png')}}" alt="logo">
+    <nav>
+        <li class="header-text"><a href="{{path('app_homepage')}}">Home</a></li>
+        <li class="header-img"><a href="{{path('app_homepage')}}"><img src="{{asset('assets/images/icon-home.png')}}" alt=""></a></li>
+        <li class="header-text"><a href="{{path('app_homepage')}}">Tricks</a></li>
+        <li class="header-img"><a href="{{path('app_homepage')}}"><img src="{{asset('assets/images/icon-bookmark.png')}}" alt=""></a></li>
+        {% if  app.user %}
+        <li class="header-text"><a href="{{path('app_logout')}}">Déconnexion</a></li>
+        <li class="header-img"><a href="{{path('app_logout')}}"><img src="{{asset('assets/images/icon-logout.png')}}" alt=""></a></li>
+        {% else %}
+        <li class="header-text"><a href="{{path('app_login')}}">Connexion</a></li>
+        <li class="header-img"><a href="{{path('app_login')}}"><img src="{{asset('assets/images/icon-login.png')}}" alt=""></a></li>
+        <li class="header-text"><a href="{{path('app_register')}}">Inscription</a></li>
+        {% endif %}
+    </nav>
+</div>

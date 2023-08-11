@@ -1,0 +1,206 @@
+
+.trick-content{
+    position: relative;
+    margin: 200px auto;
+    color: var(--main-color);
+    font-family: var(--main-font);
+    width: 80%;
+    max-width: 1000px;
+
+}
+
+.trick-hero{
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trick-hero-img{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    
+}
+.trick-content h1{
+    position: relative;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff60;
+}
+.trick-management{
+    position: absolute;
+    top: 0;
+    right: 0px;
+    z-index: 6;
+}
+
+.trick-media-list{
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 20px;
+    margin: auto;
+    list-style-position: inside;
+    justify-items: center;
+}
+
+.trick-media-list img{
+    width: 200px;
+}
+
+
+.trick-content h2{
+    text-align: center;
+    font-family: var(--secondary-font);
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+.trick-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+}
+
+.trick-list-pills{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.trick-info{
+    text-align: center;
+}
+
+#comments{
+    width: 60vw;
+    margin: auto;
+}
+
+#comments h3{
+    font-style: italic;
+    font-size: 30px;
+}
+
+.comment-list{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-content{
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.comment-content img{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.list-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+}
+
+.list-nav a{
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+.select-nav a{
+    text-decoration: underline;
+}
+
+.comment-form{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+.input-comment{
+    height: 100px;
+    width: 400px;
+}
+
+.comment-button{
+    width: 150px;
+    height: 50px;
+    align-self: center;
+}
+@media screen and (max-width: 1000px ){
+    .trick-media-list{
+        grid-template-columns: auto auto;
+    }
+}
+
+@media screen and (max-width: 500px ){
+    .trick-content{
+        margin: 0px auto;
+        width: 100vw;
+    }
+
+    .trick-media-list{
+        position: relative;
+        display: grid;
+        grid-template-columns: auto;
+        gap: 20px;
+    }
+
+    #comments{
+        width: 90vw;
+        margin: auto;
+    }
+    
+  
+    .comment-list{
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+        font-size: 10px;
+    }
+    
+   
+
+    .comment-form{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 50px;
+    }
+    
+    .input-comment{
+        height: 100px;
+        width: 90%;
+        margin: auto;
+    }
+    
+    
+    
+
+
+}

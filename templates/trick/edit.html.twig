@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une figure{% endblock %}
+
+{% block body %}
+<div class="trick-content">
+    <div class="trick-hero">
+        {% set picture = trick.pictures|first %}
+        {% if picture %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="">
+        {% else %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+        {% endif %}
+        <h1>Modification de  {{trick.name}}</h1>
+    </div>
+    <ul class="trick-media-list">
+        {% for picture in trick.pictures %}
+        <li>
+            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
+        </li>
+        {% endfor %}
+
+
+        {% for video in trick.videos %}
+        <li>
+        <iframe width="355" height="200" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <a href="/video/remove/{{video.getId}}">Supprimer</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% include "_forms/_add_form.html.twig" %}
+</div>
+{% endblock %}

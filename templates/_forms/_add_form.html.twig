@@ -1,0 +1,68 @@
+<div class="trick-form">
+    {{ form_start(trickForm)}}
+    <div class="trick-form-field">
+        {{ form_label(trickForm.name)}}
+        {{ form_widget(trickForm.name)}}
+    </div>
+
+    <div class="trick-form-field">
+        {{ form_label(trickForm.description)}}
+        {{ form_widget(trickForm.description)}}
+    </div>
+
+
+    <div id="groups" data-prototype="{{ form_row(trickForm.group.vars.prototype)|e('html_attr')  }}">
+        <div class="trick-form-field">
+            {{ form_label(trickForm.group)}}
+            {{ form_widget(trickForm.group)}}
+            <div>
+                <input type="text" class="group-autocomplete-input">
+                <div class="group-autocomplete-list"></div>
+            </div>
+            <button type="button" class="group-add-button">Ajouter</button>
+        </div>
+        <span class="list-groups"></span>
+    </div>
+
+
+
+
+    <div class="trick-form-field">
+        {{ form_label(trickForm.pictures)}}
+        {{ form_widget(trickForm.pictures)}}
+    </div>
+
+
+
+    <div class="trick-form-field" id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
+        {{ form_label(trickForm.videos)}}
+        {{ form_widget(trickForm.videos)}}
+        <div>
+            <input class="link-input" type="text">
+            <span class="link-error-message"></span>
+            <button class="link-button" type="button">Ajouter</button>
+        </div>
+        <span class="list-video"></span>
+    </div>
+
+
+    <button class="submit-button" type="submit">Valider</button>
+    {{ form_end(trickForm)}}
+
+</div>
+
+{% block javascript %}
+<script src="{{asset('js/trick_groups.js')}}"></script>
+<script src="{{asset('js/trick_video.js')}}"></script>
+<script>
+
+    let groupsData = {{ jsonGroups| raw }};
+
+    window.onload = () => {
+        trickVideosInit();
+        trickGroupsInit();
+    }
+
+
+</script>
+{% endblock %}

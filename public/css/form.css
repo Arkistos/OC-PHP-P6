@@ -1,0 +1,43 @@
+
+
+.group-add-button{
+    height: 25px;
+}
+
+input, textarea{
+    font-family: var(--main-font);
+    color: var(--main-color);
+    border-color: var(--secondary-color);
+    background-color: var(--main-background-color);
+}
+
+.list-groups{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.group-pills{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--secondary-color);
+    justify-content: center;
+    border-radius: 10px;
+    width:fit-content;
+    padding: 5px;
+}
+
+.group-pills input{
+    border: none;
+    background-color: var(--secondary-color);
+    cursor: default;
+    color: var(--main-color);
+    font-family: var(--main-font);
+    text-align: center;
+}
+
+.delete-button{
+    cursor: pointer;
+}

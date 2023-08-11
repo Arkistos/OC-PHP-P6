@@ -1,0 +1,65 @@
+.trick-form{
+    margin: 200px auto;
+    width: 80%;
+    max-width: 1000px;
+    display: flex;
+}
+
+.trick-form img{
+    width: 200px;
+}
+
+.trick-form form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: auto;
+    width: 80%;
+    max-width: 800px;
+    font-family: var(--main-font);
+}
+
+#trick_form_name{
+    width: 40%;
+}
+
+.trick-form textarea{
+    width: 100%;
+}
+
+.submit-button{
+    width: 100px;
+}
+
+.trick-form-content{
+    margin: 200px auto;
+}
+
+.trick-form-content h1{
+    font-style: italic;
+    font-family: var(--main-font);
+    color: var(--main-color);
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: -150px;
+}
+.trick-form-field{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.trick-media-list li{
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (max-width:500px){
+    .trick-form{
+        margin: 200px auto;
+        width: 90%;
+        display: flex;
+    }
+}

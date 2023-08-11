@@ -3,13 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['username', 'email'], message: 'Ce nom d\'utilisateur ou cet email existe déjà')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,23 +33,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email(
+        message : 'l\'email {{ value }} n\'est pas valide'
+    )]
     private ?string $email = null;
 
-    #[ORM\Column(options:['default'=>false])]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $is_activated = null;
 
-    #[ORM\Column(type:'string', length:100)]
+    #[ORM\Column(type: 'string', nullable: true, length: 100)]
     private ?string $resetToken;
 
-    #[ORM\Column(length: 255, nullable: true,options:['default'=>false])]
-    private ?string $activation_token = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profile_pic = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
+    private Collection $comments;
 
     public function __construct()
     {
-        $this->activation_token = 'coucou';
         $this->is_activated = false;
+        $this->comments = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -142,27 +150,56 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getResetToken():?string
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
 
-    public function setResetToken(string $resetToken):self
+    public function setResetToken(string $resetToken): self
     {
         $this->resetToken = $resetToken;
 
         return $this;
     }
-    
 
-    public function getActivationToken(): ?string
+    public function getProfilePic(): ?string
     {
-        return $this->activation_token;
+        return $this->profile_pic;
     }
 
-    public function setActivationToken(?string $activation_token): static
+    public function setProfilePic(?string $profile_pic): static
     {
-        $this->activation_token = $activation_token;
+        $this->profile_pic = $profile_pic;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
 
         return $this;
     }

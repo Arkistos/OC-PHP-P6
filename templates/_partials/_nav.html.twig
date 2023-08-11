@@ -1,7 +1,9 @@
 <nav>
+    
     {% if  app.user %}
     <li><a href="{{path('app_logout')}}">Déconnexion</a></li>
     {% else %}
     <li><a href="{{path('app_login')}}">Connexion</a></li>
     {% endif %}
+    <div class="ele image-svg-svg ele-edit ele-drag" data-target="symbol" data-item="image-svg-svg" style="top: -6px; left: 71px; width: 427px; height: 336px;"><div class="ele-handle scale symbol" style="transform: translate(0px, 48px);"></div><div class="ele-handle del symbol" style="transform: translate(0px, 48px);"></div><div class="ele-handle rotate symbol" style="transform: translate(0px, 48px);"></div><div class="ele-edit-point symbol"><div class="ele-edit-point-square"></div></div></div>
 </nav>

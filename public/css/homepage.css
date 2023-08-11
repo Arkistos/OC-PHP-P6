@@ -1,0 +1,189 @@
+.hero{
+    background-image: url('../assets/images/hero.jpg');
+    background-size: 100vw auto;
+    background-repeat: no-repeat;
+    height: 100vh;
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    font-style: italic;
+    color: var(--main-color);
+}
+strong{
+    color: var(--secondary-color);
+}
+
+.hero-content{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cta{
+    width: 100px;
+    height: 100px;
+    border: 10px var(--secondary-color) solid;
+    border-radius: 50px;
+    position: absolute;
+    right: 100px;
+    bottom: 100px;
+    cursor: pointer;
+
+    background: rgba( 255, 255, 255, 0.2 );
+    box-shadow: 0 8px 32px 0 var(--main-bg-color);
+    backdrop-filter: blur( 9.5px );
+    -webkit-backdrop-filter: blur( 9.5px );
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
+}
+
+.cta:hover{
+    background: rgba( 255, 255, 255, 0.5 );
+}
+
+.cta-up{
+    display: none;
+    bottom: 0px;
+    right: 0px;
+    z-index: 100;
+    position: absolute;
+    transform: rotate(180deg);
+}
+
+.cta-bottom{
+    position: relative;
+    width: 100vw;
+    height: 100px;
+}
+
+.hero-content h1{
+    margin-top: -40px;
+    font-size: 6em;
+    cursor: default;
+}
+h2{
+    margin-top: -40px;
+    font-size: 2em;
+    cursor: default;
+}
+
+#modal{
+    display: none;
+    width: 50vw;
+    height: 50vh;
+    border: 1px var(--main-color) solid;
+    background-color: var(--main-bg-color);
+    position:fixed;
+    top: 25vh;
+    left: 25vw;
+    z-index: 50;
+    border-radius: 10px;
+    font-family: var(--main-font);
+    color: var(--main-color);
+}
+
+#modal h1{
+    font-family: var(--main-font);
+    color: var(--main-color);
+    font-style: italic;
+    text-align: center;
+    margin-top: 100px;
+    font-size: 40px;
+}
+
+.modal-button{
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+.modal-button:hover{
+    text-decoration: underline;
+}
+
+.modal-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 50px;
+    position: absolute;
+    bottom: 50px;
+    left: auto;
+}
+
+#modal-close{
+    font-size: 30px;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    cursor: pointer;
+}
+
+#list-trickssss{
+    width: 90%;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 50px;
+    position: relative;
+}
+
+#list-tricks{
+    width: 90%;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-around;
+    align-items: space-around;
+    justify-items: center;
+    align-items: center;
+    row-gap: 50px;
+}
+
+.button-load{
+    background-color: var(--secondary-color);
+    font-family: var(--main-font);
+    color: var(--main-color);
+    width: 150px;
+    height: 50px;margin: auto;
+    cursor: pointer;
+    text-align: center;
+}
+
+@media screen and (max-width: 1000px ){
+    #list-tricks{
+        grid-template-columns: auto auto;
+    }
+
+}
+
+@media screen and (max-width: 500px ){
+    .hero{
+        background-size: 300vw auto;
+        height: 70vh;
+        width: 100vw;
+    }
+    .hero-content{
+        width: 90%;
+        height: 100%;
+    }
+
+    .cta{
+        width: 60px;
+        height: 60px;
+        border: 10px var(--secondary-color) solid;
+        border-radius: 50px;
+        position: absolute;
+        right: 0px;
+        bottom: 30vh;
+        cursor: pointer;
+    }
+
+    #list-tricks{
+        grid-template-columns: auto;
+    }
+}

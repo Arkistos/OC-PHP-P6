@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TrickController!{% endblock %}
+
+{% block body %}
+<div class="trick-content">
+    <div class="trick-hero">
+        {% set picture = trick.pictures|first %}
+        {% if picture %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="">
+        {% else %}
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+        {% endif %}
+        <h1> {{trick.name}}</h1>
+        {% if app.user %}
+            <div class="trick-management">
+            <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
+            <a href="trick/remove/{{trick.slug}}"><img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
+        </div>
+        {% endif %}
+        
+    </div>
+
+    <div class="trick-media-list">
+        {% for picture in trick.pictures %}
+        
+            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            
+        
+        {% endfor %}
+
+
+        {% for video in trick.videos %}
+        <iframe width="200" height="200" src="https://www.youtube.com/embed/{{video.getLink}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        {% endfor %}
+    </div>
+ 
+    
+    <h2>{{trick.description}}</h2>
+
+    
+
+    <ul class="trick-list-pills">
+        {% for group in trick.group %}
+        <li class="pills">{{group.name}}</li>
+        {% endfor %}
+    </ul>
+    <div class="trick-info">
+        <span>Figure créé le {{trick.createdAt|date('d-m-Y') }}
+            {% if trick.updatedAt %}
+                et modifé le {{trick.updatedAt|date('d-m-Y')}}
+            {% endif %}
+        </span>
+    </div>
+
+    
+   
+
+    
+
+    <div id="comments">
+        <h3>Commentaires</h3>
+        {% if app.user %}
+        
+            {{ form_start(commentForm) }}
+            <div class="comment-form">
+                {{ form_row(commentForm.content) }}
+                <button class="pills comment-button" type="submit">Valider</button>
+            </div>
+                {{ form_end(commentForm) }}
+        
+        {% endif %}
+        <div class="comment-list">
+        {% for comment in comments.data %}
+            <li class="comment-content">
+                {% if comment.user.profilePic == '' %}
+                <img src="{{asset('assets/uploads/profile_pics/default-profile-pic.png')}}" alt="Photo de profile par défaut">
+                {% else %}
+                <img src="{{asset('assets/uploads/profile_pics/' ~ comment.user.profilePic ~ '.webp')}}" alt="Photo de profile de {{comment.user.username}}">
+                {% endif %}
+                <strong>{{comment.user.username}} le {{comment.createdAt|date('d-m-Y')}}</strong> : {{comment.content}}
+            </li>
+        {% endfor %}
+        </div>
+        {% if comments.pages > 1 %}
+            <ul class="list-nav">
+                {% if comments.page > 1  %}
+                <li><a href="{{ path('app_trick',{slug:trick.slug, page:comments.page - 1})}}">&lt;</a></li>
+                {% endif %}
+                {% for page in 1..comments.pages %}
+                    <li 
+                    {% if comments.page == page %}
+                        class="select-nav"
+                    {% endif %}
+                    >
+                        <a href="{{path('app_trick', {slug:trick.slug, page:page})}}">{{page}}</a>
+                    </li>
+                {% endfor %} 
+
+                {% if comments.page < comments.pages %}
+                    <li><a href="{{ path('app_trick',{slug:trick.slug, page:comments.page + 1})}}">&gt;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
