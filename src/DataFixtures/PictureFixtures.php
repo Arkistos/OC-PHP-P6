@@ -29,7 +29,7 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function movePictures(string $trickSlug):void
+    public function movePictures(string $trickSlug): void
     {
         $trick = $this->getReference($trickSlug);
         foreach ($trick->getPictures() as $index => $picture) {
