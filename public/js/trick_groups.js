@@ -82,11 +82,21 @@ function createGroupPill(prototype, group) {
     return groupPill;
 }
 
-function autocompleteInputChange() {
+
+var lastValue = "";
+
+function autocompleteInputChange(e) {
     if (groupAutocompleteInput.value === '') {
         groupAutocompleteList.innerHTML = '';
         return;
     }
+    var inputRegex = /^[a-zA-Z0-9-]+$/;
+
+    if(!inputRegex.test(groupAutocompleteInput.value)){
+        groupAutocompleteInput.value = lastValue;
+        return;
+    }
+    lastValue = groupAutocompleteInput.value;
 
     const regex = new RegExp(`${groupAutocompleteInput.value}`, 'i');
     groupAutocompleteList.innerHTML = groupsData
