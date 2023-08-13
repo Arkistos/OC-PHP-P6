@@ -70,111 +70,14 @@
 
 
 
-
-
+<script src="{{asset('js/homepage_load_more.js')}}"></script>
+<script src="{{asset('js/homepage_modal.js')}}"></script>
     <script>
+        let currentPage = 1;
+        let numberPages = {{ pages }};
         window.onload = () => {
-            let modal = document.querySelector("#modal");
-            let closeButton = document.querySelector("#modal-close");
-            let cancelButton = document.querySelector("#modal-cancel");
-            let deleteLinks = document.querySelectorAll('.delete-button');
-            let loadButton = document.querySelector('.button-load');
-            let page = 1;
-            let pages = {{pages}};
-
-            closeButton.addEventListener("click", function(e){
-                closeModal();
-            })
-
-            cancelButton.addEventListener("click", function(){
-                closeModal();
-            })
-
-            deleteLinks.forEach((link)=>{
-                link.addEventListener('click', function(e){
-                    displayModal(e.target.id, e.target.getAttribute('slug'));
-                })
-            })
-
-            loadButton.addEventListener('click', function(e){
-                page ++;
-                if (page>=pages){
-                    e.target.remove();
-                }
-
-                fetch('/json-tricks/'+page, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    },
-                })
-                .then(function(response){
-                    
-                    return response.json();
-                })
-                .then((response)=>{
-                    tricks = response;
-                    for (const key in tricks){
-                        let newCard = document.createElement('div');
-                        if(tricks.hasOwnProperty(key)){
-                            newCard.className= 'card';
-                            newListPills = document.createElement('div');
-                            newListPills.className = 'list-pills';
-                            newCard.append(newListPills);
-                            for(const groupKey in tricks[key]['group']){
-                                newListPills.innerHTML +='<li class="pills">'+ tricks[key]['group'][groupKey].name +'</li>';
-                            }
-                            newImg = document.createElement('div');
-                            newImgtag = document.createElement('img');
-                            newImgtag.className = 'card-picture';
-                            let id = tricks[key]['id'];
-                            let pics = tricks[key]['pictures'];
-                            
-                            if(pics.length == 0){
-                                newImgtag.src = "{{asset('assets/uploads/tricks_pictures/default-picture.png')}}";
-                            } else {
-                                newImgtag.src = "assets/uploads/tricks_pictures/"+ id +"-"+ pics[0].id +".webp"
-                            } 
-                            newImg.append(newImgtag);
-                            newCard.append(newImg);
-
-                            let cardName = document.createElement('h3');
-                            cardName.className ='card-name';
-                            cardName.innerHTML = '<a href="trick/'+tricks[key]['slug']+'">'+tricks[key]['name']+'</a>'
-                            newCard.append(cardName);
-
-                            let cardManagement = document.createElement('div');
-                            cardManagement.className = 'card-management';
-                            cardManagement.innerHTML = '<a href="trick/edit/' + tricks[key]['slug'] + '"><img src="assets/images/icon-edit.png" alt=""></a><img class="delete-button" id='+ tricks[key]['name'] +' slug='+ tricks[key]['slug'] +' src="assets/images/icon-trash.png" alt="">'
-
-                            newCard.append(cardManagement);
-
-
-                            
-                        }
-                        let listTricks = document.querySelector('#list-tricks');
-                        listTricks.append(newCard);
-                    }
-
-                    document.querySelector('.cta-up').style.display = 'block';
-                    
-                })
-            })
-
-        }
-
-        function displayModal(trickName, trickSlug){
-            
-            let modalTrickName = document.querySelector("#trickName");
-            let deleteTrickButton = document.querySelector("#modal-delete-trick");
-            modalTrickName.innerHTML = trickName;
-            deleteTrickButton.href = 'trick/remove/'+trickSlug;
-
-            modal.style.display = 'block';
-        }
-
-        function closeModal(){
-            modal.style.display = 'none';
+            modalInit();
+            loadMoreInit(currentPage, numberPages);
         }
     </script>
     
