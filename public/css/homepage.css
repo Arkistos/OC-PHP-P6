@@ -46,13 +46,12 @@ strong{
 .cta-up{
     display: none;
     bottom: 0px;
-    right: 0px;
     z-index: 100;
     position: absolute;
     transform: rotate(180deg);
 }
 
-.cta-bottom{
+.load-more{
     position: relative;
     width: 100vw;
     height: 100px;
