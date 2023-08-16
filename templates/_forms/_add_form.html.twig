@@ -34,7 +34,8 @@
 
 
 
-    <div class="trick-form-field" id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
+    <div  id="videos" data-prototype="{{ form_row(trickForm.videos.vars.prototype)|e('html_attr') }}">
+        <div class="trick-form-field">
         {{ form_label(trickForm.videos)}}
         {{ form_widget(trickForm.videos)}}
         <div>
@@ -42,7 +43,9 @@
             <span class="link-error-message"></span>
             <button class="link-button" type="button">Ajouter</button>
         </div>
+        </div>
         <span class="list-video"></span>
+        
     </div>
 
 
@@ -53,7 +56,7 @@
 
 {% block javascript %}
 <script src="{{asset('js/trick_groups.js')}}"></script>
-<script src="{{asset('js/trick_video.js')}}"></script>
+<script src="{{asset('js/trick_videos.js')}}"></script>
 <script>
 
     let groupsData = {{ jsonGroups| raw }};

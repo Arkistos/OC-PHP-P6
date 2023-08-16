@@ -14,11 +14,21 @@
         <h1> {{trick.name}}</h1>
         {% if app.user %}
             <div class="trick-management">
-            <a href="trick/edit/{{trick.slug}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
-            <a href="trick/remove/{{trick.slug}}"><img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt=""></a>
+            <a href="{{path('app_edit_trick', {'slug' : trick.slug})}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
+            <img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt="">
         </div>
         {% endif %}
         
+    </div>
+
+    <div id="modal">
+        <h1 class="modal-content">Voulez-vous Supprimer la figure {{trick.name}}</h1>
+        <div class="modal-buttons">
+            <a class="modal-button"  href="{{path('app_remove_trick', {slug : trick.slug})}}">Supprimer</a>
+            <div class="modal-button" id="modal-cancel">Annuler</div>
+        </div>
+        
+        <div id="modal-close">X</div>
     </div>
 
     <div class="trick-media-list">
@@ -35,6 +45,7 @@
         {% endfor %}
     </div>
  
+    <div class="show-medias"><button class="pills" id="show-medias-button" type="button">Voir les médias</button></div>
     
     <h2>{{trick.description}}</h2>
 
@@ -105,4 +116,45 @@
 
     </div>
 </div>
+<script>
+    let showMedia = false;
+    let toggleMediaButton, trickMediaList;
+    let deleteButton, modal, modalCancel, modalClose;
+    window.onload = ()=>{
+        toggleMediaButton = document.querySelector('#show-medias-button');
+        trickMediaList = document.querySelector('.trick-media-list');
+
+        deleteButton = document.querySelector('.delete-button');
+        modal = document.querySelector('#modal');
+        modalCancel = document.querySelector('#modal-cancel');
+        modalClose = document.querySelector('#modal-close');
+
+        modalCancel.addEventListener('click', closeModal);
+        modalClose.addEventListener('click', closeModal);
+
+        deleteButton.addEventListener('click', onClickDeleteButton);
+        
+        toggleMediaButton.addEventListener('click', onClickToggleMedia)
+    }
+
+    function closeModal(){
+        modal.style.display = 'none';
+    }
+
+    function onClickDeleteButton(){
+        modal.style.display = 'block';
+    }
+
+    function onClickToggleMedia(){
+        showMedia = !showMedia;
+        if(showMedia){
+            toggleMediaButton.innerText = 'Cacher les médias';
+            trickMediaList.style.display = 'grid';
+            
+        } else {
+            toggleMediaButton.innerText = 'Voir les médias';
+            trickMediaList.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}

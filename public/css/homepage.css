@@ -95,6 +95,8 @@ h2{
 .modal-button{
     text-decoration: none;
     color: var(--main-color);
+    z-index: 1000;
+    cursor: pointer;
 }
 
 .modal-button:hover{
@@ -158,9 +160,6 @@ h2{
         grid-template-columns: auto auto;
     }
 
-}
-
-@media screen and (max-width: 500px ){
     .hero{
         background-size: 300vw auto;
         height: 70vh;
@@ -169,6 +168,10 @@ h2{
     .hero-content{
         width: 90%;
         height: 100%;
+    }
+
+    .hero-content h1{
+        font-size: 4.5em;
     }
 
     .cta{
@@ -181,6 +184,11 @@ h2{
         bottom: 30vh;
         cursor: pointer;
     }
+
+}
+
+@media screen and (max-width: 1000px ){
+    
 
     #list-tricks{
         grid-template-columns: auto;

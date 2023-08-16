@@ -51,7 +51,7 @@ function createVideo(prototype, link) {
         <div>
             ${prototype}
             <span>
-                <iframe width="560" height="315" 
+                <iframe width="300" height="200" 
                 src="https://www.youtube.com/embed/${link}" 
                 title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
                 clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
