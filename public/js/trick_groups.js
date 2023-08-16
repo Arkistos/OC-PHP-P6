@@ -1,6 +1,7 @@
-let groupAutocompleteInput, groupAutocompleteList, groupAddButton;
+let groupAutocompleteInput, groupAutocompleteList, groupAddButton, groupsData;
 
 function trickGroupsInit() {
+    groupsData = JSON.parse(document.querySelector('#jsonGroups').dataset.prototype);
     groupAutocompleteInput = document.querySelector('.group-autocomplete-input');
     groupAutocompleteList = document.querySelector('.group-autocomplete-list');
     groupAddButton = document.querySelector('.group-add-button');
