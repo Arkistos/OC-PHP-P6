@@ -46,6 +46,21 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
             'front-flip',
             $manager
         );
+        $this->createVideo(
+            'k-CoAquRSwY',
+            'mctwist',
+            $manager
+        );
+        $this->createVideo(
+            'rH1cfVY4qgc',
+            'switch-to-rails',
+            $manager
+        );
+        $this->createVideo(
+            'QX6yvs6uTVg',
+            'backside-rodeo',
+            $manager
+        );
 
         $manager->flush();
     }

@@ -25,6 +25,9 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
         $this->movePictures('nose-slide');
         $this->movePictures('tail-slide');
         $this->movePictures('front-flip');
+        $this->movePictures('mctwist');
+        $this->movePictures('switch-to-rails');
+        $this->movePictures('backside-rodeo');
 
         $manager->flush();
     }
@@ -33,8 +36,8 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
     {
         $trick = $this->getReference($trickSlug);
         foreach ($trick->getPictures() as $index => $picture) {
-            $oldPath = $path = $this->params->get('ressources_directory').$trick->getSlug().$index.'.webp';
-            $newPath = $path = $this->params->get('images_directory').'tricks_pictures/'.$trick->getId().'-'.$picture->getId().'.webp';
+            $oldPath = $this->params->get('ressources_directory').$trick->getSlug().$index.'.webp';
+            $newPath = $this->params->get('images_directory').'tricks_pictures/'.$trick->getId().'-'.$picture->getId().'.webp';
             copy($oldPath, $newPath);
         }
     }

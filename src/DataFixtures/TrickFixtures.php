@@ -17,69 +17,82 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
         $this->createTrick(
             'Mute',
             'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
             ['Grabs'],
-            [33, 34],
-            263,
+            2,
             $manager
         );
         $this->createTrick(
             'Indy',
             'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.',
             ['Grabs'],
-            [35, 36, 37],
-            264,
+            3,
             $manager
         );
         $this->createTrick(
             '360°',
             'Tour complet.',
             ['Rotations'],
-            [38],
-            265,
+            1,
             $manager
         );
         $this->createTrick(
             '180° BackFlip',
             'Demi tour avec salto arrière.',
             ['Rotations', 'Flips'],
-            [39],
-            266,
+            1,
             $manager
         );
         $this->createTrick(
             'Nose Slide',
             "Glisse sur une barre avec la plance penché vers l'avant",
             ['Slides'],
-            [40, 41],
-            267,
+            2,
             $manager
         );
         $this->createTrick(
             'Tail Slide',
             "Glisse sur une barre avec la plance penché vers l'arrière",
             ['Slides'],
-            [42],
-            268,
+            1,
             $manager
         );
         $this->createTrick(
             'Front Flip',
             'Salto avant',
             ['Flips'],
-            [43, 44],
-            269,
+            2,
+            $manager
+        );
+
+        $this->createTrick(
+            'McTwist',
+            'Un flip agrémentés d\'une vrille',
+            ['Flips', 'Rotations'],
+            2,
+            $manager
+        );
+        $this->createTrick(
+            'Switch to rails',
+            'Entrer sur la barre en partant en arrière et en effectuant un quart de tour',
+            ['Rotations', 'Slides'],
+            1,
+            $manager
+        );
+        $this->createTrick(
+            'Backside rodéo',
+            'Salto arrière avec saisie de la carre backside',
+            ['Flips', 'Grabs'],
+            2,
             $manager
         );
 
         $manager->flush();
     }
 
-    private function createTrick(string $name, string $description, array $groupReferences, array $picturesId, int $id, ObjectManager $manager): void
+    private function createTrick(string $name, string $description, array $groupReferences, int $picturesNumber, ObjectManager $manager): void
     {
         $trick = new Trick();
         $trick->setName($name);
@@ -92,10 +105,16 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $trick->addGroup($group);
         }
 
-        foreach ($picturesId as $index => $pictureId) {
+        /*foreach ($picturesId as $index => $pictureId) {
             $picture = new Picture();
             $picture->setTrick($trick);
 
+            $manager->persist($picture);
+        }*/
+
+        for($pictures = 0; $pictures<$picturesNumber; $pictures++){
+            $picture = new Picture();
+            $picture->setTrick($trick);
             $manager->persist($picture);
         }
 
