@@ -17,13 +17,6 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $user = new User();
-        $user->setEmail('pierre.lacaud@gmail.com');
-        $user->setUsername('Pierre');
-        $user->setPassword(
-            $this->userPasswordHasherInterface->hashPassword($user, 'testing')
-        );
-        $manager->persist($user);
 
         $faker = Faker\Factory::create('fr_FR');
 

@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['username', 'email'], message: 'Ce nom d\'utilisateur ou cet email existe déjà')]
+#[UniqueEntity(fields: ['username'], message: 'Ce nom d\'utilisateur existe déjà')]
+#[UniqueEntity(fields: ['email'], message: 'Cet email existe déjà')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -32,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique:true)]
     #[Assert\Email(
         message : 'l\'email {{ value }} n\'est pas valide'
     )]

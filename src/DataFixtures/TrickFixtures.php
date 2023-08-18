@@ -105,13 +105,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             $trick->addGroup($group);
         }
 
-        /*foreach ($picturesId as $index => $pictureId) {
-            $picture = new Picture();
-            $picture->setTrick($trick);
-
-            $manager->persist($picture);
-        }*/
-
         for($pictures = 0; $pictures<$picturesNumber; $pictures++){
             $picture = new Picture();
             $picture->setTrick($trick);
