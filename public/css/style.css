@@ -1,12 +1,13 @@
 
 
 @import url(header.css);
-@import url(homepage.css);
+
 @import url(card.css);
 @import url(trick.css);
 @import url(security.css);
 @import url(form.css);
 @import url(trick-form.css);
+@import url(homepage.css);
 
 html{
     scroll-behavior: smooth;

@@ -100,18 +100,6 @@ class TrickController extends AbstractController
                 $trick->addGroup($g);
             }
 
-            /*** Ajout d'un lien  *
-            $videos = $trick->getVideos();
-            foreach($videos as $video) {
-                $video->setLink($videoService->getLinks($video->getLink()));
-
-                $trick->addVideo($video);
-                $entityManagerInterface->persist($video);
-            }
-
-
-            /**** */
-
             $slug = $sluggerInterface->slug($trick->getName())->lower();
             $trick->setSlug($slug);
             $trick->setCreatedAt(new \DateTimeImmutable());

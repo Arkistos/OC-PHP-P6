@@ -71,7 +71,7 @@ h2{
 #modal{
     display: none;
     width: 50vw;
-    height: 50vh;
+    height: 25vh;
     border: 1px var(--main-color) solid;
     background-color: var(--main-bg-color);
     position:fixed;
@@ -84,12 +84,13 @@ h2{
 }
 
 #modal h1{
+    background-color: #FFFFFF00;
     font-family: var(--main-font);
     color: var(--main-color);
     font-style: italic;
     text-align: center;
-    margin-top: 100px;
     font-size: 40px;
+    height: 50%;
 }
 
 .modal-button{
@@ -185,12 +186,18 @@ h2{
         cursor: pointer;
     }
 
+    #modal h1{
+        font-size: 25px;
+    }
+
 }
 
-@media screen and (max-width: 1000px ){
+@media screen and (max-width: 500px ){
     
 
     #list-tricks{
         grid-template-columns: auto;
     }
+
+    
 }

@@ -49,6 +49,10 @@
 
 
     <button class="submit-button" type="submit">Valider</button>
+    {% if trick.slug is defined %}
+        <a href="{{path('app_remove_trick', {'slug': trick.slug})}}">Supprimer</a>
+    {% endif %}
+    
     {{ form_end(trickForm)}}
 
    <div id="jsonGroups" data-prototype={{jsonGroups}} ></div>
