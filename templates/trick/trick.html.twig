@@ -7,15 +7,15 @@
     <div class="trick-hero">
         {% set picture = trick.pictures|first %}
         {% if picture %}
-            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="">
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="Image illustrant {{trick.getName}}">
         {% else %}
-            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="Image illustrant {{trick.getName}}">
         {% endif %}
         <h1> {{trick.name}}</h1>
         {% if app.user %}
             <div class="trick-management">
-            <a href="{{path('app_edit_trick', {'slug' : trick.slug})}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt=""></a>
-            <img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt="">
+            <a href="{{path('app_edit_trick', {'slug' : trick.slug})}}"><img src="{{asset('assets/images/icon-edit.png')}}" alt="Icone d'édition"></a>
+            <img class="delete-button" id="{{trick.name}}" slug="{{trick.slug}}" src="{{asset('assets/images/icon-trash.png')}}" alt="Icone de suppression">
         </div>
         {% endif %}
         
@@ -34,7 +34,7 @@
     <div class="trick-media-list">
         {% for picture in trick.pictures %}
         
-            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="Image illustrant {{trick.getName}}">
             
         
         {% endfor %}

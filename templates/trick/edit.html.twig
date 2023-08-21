@@ -7,16 +7,16 @@
     <div class="trick-hero">
         {% set picture = trick.pictures|first %}
         {% if picture %}
-            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="">
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/'~ trick.getId ~ '-' ~ trick.pictures[0].getId ~'.webp')}}" alt="Image de couverture pour {{trick.getName}}">
         {% else %}
-            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="">
+            <img class="trick-hero-img" src="{{asset('assets/uploads/tricks_pictures/default-picture.png')}}" alt="Image de couverture pour {{trick.getName}}">
         {% endif %}
         <h1>Modification de  {{trick.name}}</h1>
     </div>
     <ul class="trick-media-list">
         {% for picture in trick.pictures %}
         <li>
-            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="">
+            <img src="{{asset('assets/uploads/tricks_pictures/'~ picture.getTrick.getId ~ '-' ~ picture.getId ~'.webp')}}" alt="Image illustrant {{trick.getName}}">
             <a href="/picture/remove/{{picture.getId}}">Supprimer</a>
         </li>
         {% endfor %}
